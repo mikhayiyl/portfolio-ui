@@ -1,0 +1,97 @@
+@import "./config";
+@import "./messenger";
+
+* {
+  margin: 0;
+  padding: 0;
+  text-decoration: none;
+  user-select: none;
+}
+
+body {
+  font-weight: weight(regular);
+}
+
+.icons {
+  font-size: 1rem;
+  cursor: pointer;
+  color: set-text($text-color);
+  &:hover {
+    transition: all 1s ease-in-out;
+    text-decoration: none;
+    color: $secondary-color;
+  }
+}
+.link {
+  cursor: pointer;
+  text-decoration: none;
+  display: flex;
+  text-align: center;
+  align-items: center;
+  transition: all 0.5s ease-in-out;
+
+  &:hover {
+    text-decoration: none;
+    color: $secondary-color;
+  }
+
+  &.active {
+    color: $secondary-color;
+    border-bottom: 3px solid #fff;
+  }
+}
+
+.dark {
+  @include darkTheme(true);
+  box-shadow: 0 0 5px 0 #fff;
+  color: #fff !important;
+
+  .link {
+    color: #fff;
+
+    &.active {
+      color: $secondary-color;
+    }
+  }
+
+  .icons-cover {
+    width: 2rem;
+    background-color: #444;
+    height: 2rem;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    border-radius: 50%;
+  }
+
+  .contact-item {
+    box-shadow: 0 0 5px 1px #fff !important;
+  }
+
+  .section-title {
+    color: #fff;
+  }
+}
+
+.profileImg {
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  object-fit: cover;
+  box-shadow: 0 0 5px 0 #fff;
+}
+.flex {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-evenly;
+}
+.chatOnlineBadge {
+  position: absolute;
+  width: 12px;
+  height: 12px;
+  top: 2px;
+  right: 0;
+  border-radius: 50%;
+  background-color: lime;
+  border: 3px solid #fff;
+}

@@ -1,0 +1,148 @@
+.Container {
+  flex: 50%;
+  height: 100%;
+  padding: 10px;
+  background-color: #222;
+  padding: 0.8rem;
+  position: relative;
+  @media (min-width: 768px) {
+    width: "100%";
+  }
+}
+
+.wrapper {
+  display: flex;
+  justify-content: space-evenly;
+  align-items: center;
+}
+.info {
+  display: flex;
+  justify-content: space-between;
+  margin: 1rem 0;
+  div {
+    margin: 0 0.5rem;
+
+    h6 {
+      font-size: 1rem;
+      color: #fff;
+    }
+
+    p {
+      color: #fff;
+    }
+  }
+}
+
+.list-wrapper {
+  position: relative;
+}
+
+.list-group {
+  list-style: none;
+  width: 150px;
+  text-align: center;
+  height: 50px;
+  position: absolute;
+  right: 0rem;
+  li {
+    background: gray;
+    color: #fff;
+    padding-left: 4px;
+    border-radius: 0.3rem;
+    cursor: pointer;
+    font-weight: 500;
+    border: 1px solid #000;
+
+    &:hover {
+      background-color: orangered;
+    }
+  }
+}
+
+.upload {
+  width: 50%;
+  height: 100%;
+  background: #999;
+  margin: 0 auto;
+  padding: 10px;
+  overflow-y: scroll;
+  position: relative;
+
+  .button {
+    position: absolute;
+    top: 3rem;
+    left: 10px;
+  }
+
+  @media (max-width: 768px) {
+    width: 100%;
+  }
+
+  &-top {
+    width: 80%;
+    margin: 3rem auto;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  &-title {
+    font-weight: 500;
+    font-size: 1.5rem;
+    text-align: center;
+    font-family: "Franklin Gothic Medium", "Arial Narrow", Arial, sans-serif;
+  }
+
+  &-images {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-wrap: wrap;
+    flex-direction: column;
+    img {
+      width: 150px;
+      height: 150px;
+      object-fit: cover;
+      margin: 10px;
+      cursor: pointer;
+
+      @media (max-width: 768px) {
+        width: 90%;
+        max-height: 350px;
+      }
+    }
+  }
+}
+.preview {
+  position: relative;
+  padding: 0 20px 10px 20px;
+  border-radius: 10px;
+  margin-top: 10vh;
+}
+.previevImg {
+  width: 98%;
+  max-height: 300px;
+  object-fit: contain;
+  border-radius: 10px;
+  box-shadow: 0px 0px 10px 3px #000;
+  cursor: pointer;
+  transition: all 3s ease-in-out;
+  &:hover {
+    box-shadow: 0px 0px 10px 3px orangered;
+    transform: scale(0.9);
+  }
+}
+.cancel {
+  position: absolute;
+  top: -10px;
+  right: 0px;
+  color: red;
+  cursor: pointer;
+  font-size: 2rem;
+}
+.title {
+  color: #fff;
+  font-size: 1.5rem;
+  font-weight: 500;
+  text-align: center;
+}
