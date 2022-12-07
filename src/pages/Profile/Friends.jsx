@@ -63,7 +63,7 @@ const Friend = ({ friend, unFriendUser, user, sentRequest, cancelRequest, url, s
         <div className="info" onClick={() => setOpen(false)}>
             <Link to={`/profile/${friend._id}`} className="link" >
 
-                <img src={url + friend.profilePicture} className="profileImg" alt={friend.username} />
+                <img src={friend.profilePicture} className="profileImg" alt={friend.username} />
                 <div>
                     <h6>{friend.username}</h6>
                     <p>{friend.friends.length} friends</p>
