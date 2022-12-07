@@ -7,33 +7,6 @@ import logger from '../services/logger';
 
 const FriendsBar = ({ onOpen, state, Dispatch }) => {
 
-    const currentuser = state.user;
-    const [requestSent, setRequest] = useState(false);
-    //friend Request
-    const sentRequest = async (user) => {
-        try {
-            setRequest(true);
-            await friend.sentRequest(currentuser._id, user._id);
-        } catch (error) {
-            setRequest(false);
-            logger.log(error);
-        }
-    }
-
-
-    const cancelRequest = async (user) => {
-
-        try {
-            setRequest(false);
-            await friend.cancelRequest(currentuser._id, user._id);
-
-        } catch (error) {
-            setRequest(true);
-            logger.log(error);
-        }
-    }
-
-
 
 
     console.count("FRIENDS BAR COMPONENT",);
@@ -54,21 +27,8 @@ const FriendsBar = ({ onOpen, state, Dispatch }) => {
             </FriendsRequests>)}
             <Wrapper>
                 <h6>Search Friends</h6>
-                {state.otherUsers.map(user =>
-                    <Friends key={user._id}>
-                        {user._id !== currentuser._id && <div style={{ display: 'flex', justifyContent: 'space-between', width: '70%' }}>
+                {state.otherUsers.map(user => <Friend key={user._id} user={user} Dispatch={Dispatch} />
 
-                            <Link onClick={onOpen} to={`/profile/${user._id}`} className='link'> <Profile >
-                                <ProfileImg src={user.profilePicture} alt={user.username} />
-                                <ProfileName>{user.username}</ProfileName>
-                            </Profile>
-                            </Link>
-                            <Btns>
-                                {(!currentuser.friends.includes(user._id) && !requestSent) ? <button onClick={() => sentRequest(user)} className="btn btn-primary btn-sm m-1">Add Friend</button> : <button onClick={() => cancelRequest(user)} className="btn btn-secondary btn-sm m-1">Cancel Request</button>}
-                            </Btns>
-
-                        </div>}
-                    </Friends>
 
 
                 )}
@@ -85,6 +45,52 @@ const FriendsBar = ({ onOpen, state, Dispatch }) => {
 }
 
 export default FriendsBar
+
+const Friend = ({ user, Dispatch }) => {
+
+
+
+    const currentuser = state.user;
+    const [requestSent, setRequest] = useState(false);
+    //friend Request
+    const sentRequest = async (user) => {
+
+        try {
+            setRequest(true);
+
+            await friend.sentRequest(currentuser._id, user._id);
+        } catch (error) {
+            setRequest(false);
+            logger.log(error);
+        }
+    }
+
+
+    const cancelRequest = async (user) => {
+
+        setRequest(false);
+        rejectUser(Dispatch, user._id)
+    }
+
+
+
+
+    <Friends >
+        {user._id !== currentuser._id && <div style={{ display: 'flex', justifyContent: 'space-between', width: '70%' }}>
+
+            <Link onClick={onOpen} to={`/profile/${user._id}`} className='link'> <Profile >
+                <ProfileImg src={user.profilePicture} alt={user.username} />
+                <ProfileName>{user.username}</ProfileName>
+            </Profile>
+            </Link>
+            <Btns>
+                {(!currentuser.friends.includes(user._id) && !requestSent) ? <button onClick={() => sentRequest(user)} className="btn btn-primary btn-sm m-1">Add Friend</button> : <button onClick={() => cancelRequest(user)} className="btn btn-secondary btn-sm m-1">Cancel Request</button>}
+            </Btns>
+
+        </div>}
+    </Friends>
+
+}
 
 
 
