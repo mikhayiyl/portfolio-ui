@@ -25,7 +25,7 @@ export default Friends
 
 
 
-const Friend = ({ friend, unFriendUser, user, sentRequest, cancelRequest, url, state }) => {
+const Friend = ({ friend, unFriendUser, user, sentRequest, cancelRequest, state }) => {
     const [open, setOpen] = useState(false);
     const [isFriend, setIsFriend] = useState(user.friends.includes(friend._id));
     const [requestSend, setSend] = useState(friend.friendRequests.includes(user._id));
