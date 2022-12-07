@@ -9,7 +9,9 @@ const FriendsBar = ({ onOpen, state, Dispatch }) => {
 
 
 
-    console.count("FRIENDS BAR COMPONENT",);
+
+
+    console.log("FRIENDS BAR COMPONENT", state.otherUsers);
     return (
         <FriendsContainer>
             <Cancel onClick={onOpen} />
@@ -27,7 +29,7 @@ const FriendsBar = ({ onOpen, state, Dispatch }) => {
             </FriendsRequests>)}
             <Wrapper>
                 <h6>Search Friends</h6>
-                {state.otherUsers.map(user => <Friend key={user._id} state={state} user={user} Dispatch={Dispatch} onOpen={onOpen} />
+                {state.otherUsers.map(user => <Friend key={user._id} user={user} state={state} Dispatch={Dispatch} onOpen={onOpen} />
 
 
 
@@ -46,7 +48,7 @@ const FriendsBar = ({ onOpen, state, Dispatch }) => {
 
 export default FriendsBar
 
-const Friend = ({ state, user, Dispatch, onOpen }) => {
+const Friend = ({ state, Dispatch, user, onOpen }) => {
 
 
 
@@ -67,15 +69,21 @@ const Friend = ({ state, user, Dispatch, onOpen }) => {
 
 
     const cancelRequest = async (user) => {
+        try {
+            setRequest(false);
+            await friend.cancelRequest(currentuser._id, user._id);
 
-        setRequest(false);
-        rejectUser(Dispatch, user._id)
+        } catch (error) {
+            setRequest(requestSent);
+            logger.log(error)
+        }
+
     }
 
 
 
 
-    <Friends >
+    return <Friends >
         {user._id !== currentuser._id && <div style={{ display: 'flex', justifyContent: 'space-between', width: '70%' }}>
 
             <Link onClick={onOpen} to={`/profile/${user._id}`} className='link'> <Profile >
