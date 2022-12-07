@@ -3,7 +3,6 @@ import "swiper/swiper.min.css";
 import "swiper/components/effect-coverflow/effect-coverflow.min.css";
 import "swiper/components/pagination/pagination.min.css";
 import "swiper/components/navigation/navigation.min.css";
-import config from "../../../config.json"
 import "./style.scss";
 import SwiperCore, {
   EffectCoverflow,
@@ -44,7 +43,7 @@ export default function Gallery({ profile }) {
       >
         {profile.images.map(image => <SwiperSlide key={image.image}  >
           <Link to={`/image/${image.image}`}>
-            <img src={config.imageUrl + image.image} alt={image.image} />
+            <img src={image.image} alt={image.image} />
           </Link>
         </SwiperSlide>)}
       </Swiper>

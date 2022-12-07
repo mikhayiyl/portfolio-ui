@@ -1,5 +1,4 @@
 import { Comment, CommentBottom, CommentMenu, CommentProfileImg, CommentSidebar, CommentSmall, CommentText, CommentTop, PostSidebarItem, PostSidebarText, PostSidebarWrapper } from './PostStyles'
-import config from "../../config.json"
 import { format } from 'timeago.js';
 import DottedMenu from '../common/DottedMenu';
 import { DeleteRounded, LockRounded, Report } from '@material-ui/icons';
@@ -8,7 +7,6 @@ import comment from '../services/Comments';
 
 const PostComment = ({ text, user, createdAt, likes, spam, replies, _id, onDelete, theme, currentuser }) => {
     const [commentMenu, openCommentMenu] = useState(false);
-    const url = config.imageUrl;
     const [spammed, setSpammed] = useState(spam);
 
     const reportComment = async (id) => {
@@ -26,7 +24,7 @@ const PostComment = ({ text, user, createdAt, likes, spam, replies, _id, onDelet
                     display: 'flex', alignItems: "center",
 
                 }}>
-                    <CommentProfileImg src={url + user.profilePicture} />
+                    <CommentProfileImg src={user.profilePicture} />
                     <CommentText>{spammed ? <LockRounded /> : text}</CommentText>
 
                     <CommentMenu onMouseMove={() => openCommentMenu(true)} onMouseLeave={() => openCommentMenu(false)}>

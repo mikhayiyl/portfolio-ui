@@ -13,11 +13,10 @@ import {
 
 import { Link } from "react-router-dom";
 import { RightBarContainer } from './ProfileStyles';
-import config from "../../config.json"
 import { useEffect } from 'react';
 
 
-const Rightbar = ({ profile, friends, defaultProfile, user, followings, followers, theme }) => {
+const Rightbar = ({ profile, friends, user, followings, followers, theme }) => {
 
     const [coverPictures, setCoverPictures] = useState([]);
     const [profilePictures, setProfilePictures] = useState([])
@@ -30,7 +29,6 @@ const Rightbar = ({ profile, friends, defaultProfile, user, followings, follower
 
 
 
-    const url = config.imageUrl;
 
     return (
         <RightBarContainer className={theme}>
@@ -60,7 +58,7 @@ const Rightbar = ({ profile, friends, defaultProfile, user, followings, follower
                             <Link key={friend._id} to={`/profile/${friend._id}`} className='link'>
                                 <RightBarFollowing>
                                     <FollowingImg
-                                        src={friend.profilePicture ? url + friend.profilePicture : defaultProfile}
+                                        src={friend.profilePicture}
                                         alt={friend.username}
                                         className="profileImg"
                                     />
@@ -82,7 +80,7 @@ const Rightbar = ({ profile, friends, defaultProfile, user, followings, follower
                             <Link key={following._id} to={`/profile/${following._id}`} className='link'>
                                 <RightBarFollowing>
                                     <FollowingImg
-                                        src={following.profilePicture ? url + following.profilePicture : defaultProfile}
+                                        src={following.profilePicture}
                                         alt={following.username}
                                         className="profileImg"
 
@@ -105,7 +103,7 @@ const Rightbar = ({ profile, friends, defaultProfile, user, followings, follower
                             <Link key={follower._id} to={`/profile/${follower._id}`} className='link'>
                                 <RightBarFollowing>
                                     <FollowingImg
-                                        src={follower.profilePicture ? url + follower.profilePicture : defaultProfile}
+                                        src={follower.profilePicture}
                                         alt={follower.username}
                                         className="profileImg"
 
@@ -128,7 +126,7 @@ const Rightbar = ({ profile, friends, defaultProfile, user, followings, follower
                             <Link key={pic.image} to={`/profile/${profile._id}/images`} className='link'>
                                 <RightBarFollowing>
                                     <FollowingImg
-                                        src={pic.image ? url + pic.image : defaultProfile}
+                                        src={pic.image}
                                         alt={pic.image}
                                         className="profileImg"
 
@@ -150,7 +148,7 @@ const Rightbar = ({ profile, friends, defaultProfile, user, followings, follower
                             <Link key={pic.image} to={`/profile/${profile._id}/images`} className='link'>
                                 <RightBarFollowing>
                                     <FollowingImg
-                                        src={pic.image ? url + pic.image : defaultProfile}
+                                        src={pic.image}
                                         alt={pic.image}
                                         className="profileImg"
 

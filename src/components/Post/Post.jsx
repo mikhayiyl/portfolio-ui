@@ -2,7 +2,6 @@ import { toast } from "react-toastify";
 import { useState, useEffect } from "react";
 import { DeleteForever, Report, Save, Share, ThumbDown } from "@material-ui/icons"
 import { FaHeart, FaLock } from "react-icons/fa";
-import config from "../../config.json"
 import {
   PostContainer,
   PostWrapper,
@@ -212,7 +211,6 @@ const Post = ({ post, reportPost, theme, currentuser }) => {
 
 
   console.count('postComponent');
-  const url = config.imageUrl;
   return (
     <PostContainer className={theme} >
       {openSidebar && <PostSidebar theme={theme}>
@@ -256,7 +254,7 @@ const Post = ({ post, reportPost, theme, currentuser }) => {
             <Link to={`/profile/${user._id}`} className='link'>
               <img
                 className="profileImg"
-                src={url + user.profilePicture}
+                src={user.profilePicture}
                 alt={user.username}
               />
               <ProfileUsername>{user.username}</ProfileUsername>
@@ -274,9 +272,9 @@ const Post = ({ post, reportPost, theme, currentuser }) => {
             <div>
 
               {media.name === "video" ? (
-                <PostVideo src={url + media.filename} controls></PostVideo>
+                <PostVideo src={media.file} controls></PostVideo>
               ) : (
-                <PostImage src={url + media.filename} alt={media.name} />
+                <PostImage src={media.file} alt={media.name} />
               )}
             </div>}
         </PostCenter>

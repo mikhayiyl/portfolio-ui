@@ -1,5 +1,4 @@
 import "./style.scss";
-import config from "../../../config.json"
 import { useState, useEffect } from 'react';
 const Conversation = ({ conversation, state }) => {
     const [user, setUser] = useState({});
@@ -23,14 +22,12 @@ const Conversation = ({ conversation, state }) => {
     }, [state.onlineusers, user])
 
 
-    // const picApi = config.imageUrl;
-    const url = config.imageUrl;
 
 
     return (
         <div className="conversation">
             <div className="image-Box">
-                <img src={url + user.profilePicture} alt={user.username} className="conversationImg profileImg" />
+                <img src={user.profilePicture} alt={user.username} className="conversationImg profileImg" />
                 {isOnline && <div className="chatOnlineBadge"></div>}
             </div>
             <span className="conversationName">{user?.username}</span>

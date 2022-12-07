@@ -2,7 +2,6 @@ import React from 'react'
 import { Link } from 'react-router-dom'
 import styled from 'styled-components'
 import { mobile } from '../../../ResponsiveDesigns';
-import config from "../../../config.json"
 import { searchMenuClosed } from '../../../store/menu';
 import { useDispatch } from 'react-redux';
 
@@ -75,7 +74,7 @@ const SearchBox = ({ filters, setText, theme }) => {
             <Input type="text" className="form-control" onChange={e => setText(e.target.value.trim())} />
             <Wrapper theme={theme}>
                 {filters.map(user => <ProfileLink key={user._id} to={`/profile/${user._id}`} onClick={clearBar} className='link'><List >
-                    <img src={config.imageUrl + user.profilePicture} className='profileImg' alt={user.username} />
+                    <img src={user.profilePicture} className='profileImg' alt={user.username} />
                     <Text>{user.username}</Text>
                 </List></ProfileLink>)}
             </Wrapper>

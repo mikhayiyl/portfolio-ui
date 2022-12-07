@@ -2,7 +2,6 @@ import { SendRounded } from '@material-ui/icons';
 import React, { useEffect, useRef, useState } from 'react'
 import { FaTimes } from 'react-icons/fa';
 import Message from '../../pages/messenger/message/Message';
-import config from "../../config.json"
 import { Link } from 'react-router-dom';
 
 const HomeMessenger = ({ messages, newMessage, setNewMessage, onSubmit, user, currentChat, socket, comingMessage, friend, openChat, onlineUsers }) => {
@@ -46,7 +45,7 @@ const HomeMessenger = ({ messages, newMessage, setNewMessage, onSubmit, user, cu
             <div className="messenger-top">
                 <Link to={`/profile/${friend._id}`} className='link'>
                     <div className="imgContainer">
-                        <img src={config.imageUrl + friend.profilePicture} alt={friend.username} className="profileImg" />
+                        <img src={ friend.profilePicture} alt={friend.username} className="profileImg" />
                         {isOnline && <div className="chatOnlineBadge"></div>}
                     </div>
                     <span className="messenger-info">

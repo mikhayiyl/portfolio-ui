@@ -4,7 +4,6 @@ import { useDispatch, useSelector } from 'react-redux'
 import { NavLink } from 'react-router-dom'
 import { profileBarClosed } from '../../../store/menu'
 import "./style.scss";
-import config from "../../../config.json"
 const AsideMenu = ({ user }) => {
     const { profileNavMenu: open } = useSelector(state => state.entities.menubars);
     const dispatch = useDispatch();
@@ -26,7 +25,7 @@ const AsideMenu = ({ user }) => {
 
                         onClick={closeMenu}
                         to={`/profile/${user._id}`}
-                    >  <img src={config.imageUrl + user.profilePicture} alt={user.username} className="profile-img" />
+                    >  <img src={user.profilePicture} alt={user.username} className="profile-img" />
                         <small className="text">
 
                             {user.username}

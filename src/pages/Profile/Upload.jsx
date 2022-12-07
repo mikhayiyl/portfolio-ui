@@ -1,8 +1,10 @@
 import axios from 'axios';
 import React, { useState } from 'react'
-import config from "../../config.json"
 import { Camera, Cancel } from '@material-ui/icons';
 import logger from '../../components/services/logger';
+import { getStorage, ref, uploadBytesResumable, getDownloadURL } from "firebase/storage";
+import app from "../../components/common/Firebase"
+
 const Upload = ({ user, setIsOpen, openUpload, name, setProfile, profile }) => {
     const [file, setFile] = useState(null);
     const coverPictures = user.images.filter(im => im.type !== 'profile');
@@ -12,20 +14,48 @@ const Upload = ({ user, setIsOpen, openUpload, name, setProfile, profile }) => {
         const url = "/uploads"
         e.preventDefault();
 
-        if (file) {
-            const data = new FormData();
-            data.append("file", file);
-            data.append("id", user._id);
-            data.append("name", name);
 
-            try {
-                await axios.put(url, data)
-                window.location.reload();
-            } catch (error) {
-                logger.log(error);
+
+        const fileName = new Date().getTime() + file.name;
+        const storage = getStorage(app);
+        const storageRef = ref(storage, fileName);
+
+
+
+        const uploadTask = uploadBytesResumable(storageRef, file);
+
+        // Register three observers:
+        // 1. 'state_changed' observer, called any time the state changes
+        // 2. Error observer, called on failure
+        // 3. Completion observer, called on successful completion
+        uploadTask.on('state_changed',
+            (snapshot) => {
+                // Observe state change events such as progress, pause, and resume
+                // Get task progress, including the number of bytes uploaded and the total number of bytes to be uploaded
+                const progress = (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
+                console.log('Upload is ' + progress + '% done');
+                switch (snapshot.state) {
+                    case 'paused':
+                        console.log('Upload is paused');
+                        break;
+                    case 'running':
+                        console.log('Upload is running');
+                        break;
+                    default:
+
+                }
+            },
+            (error) => {
+                // Handle unsuccessful uploads
+                logger.log(error)
+            },
+            () => {
+                // Handle successful uploads on complete
+                getDownloadURL(uploadTask.snapshot.ref).then(async (downloadURL) => {
+                    await axios.put(url, { userId: user._id, file: downloadURL, name })
+                }).then(() => window.location.reload()).catch(ex => logger.log(ex))
             }
-        }
-
+        );
     }
 
     const editImage = async (image) => {
@@ -66,11 +96,11 @@ const Upload = ({ user, setIsOpen, openUpload, name, setProfile, profile }) => {
                 <h2 className="upload-title">Select from uploaded pictures</h2>
                 <div className="profile-pics">
                     <h3 className="upload-title">Profile pictures</h3>
-                    {profilePictures.map(pic => <img src={config.imageUrl + pic.image} alt={pic.image} key={pic.image} onClick={() => editImage(pic.image)} />)}
+                    {profilePictures.map(pic => <img src={pic.image} alt={pic.image} key={pic.image} onClick={() => editImage(pic.image)} />)}
                 </div>
                 <div className="cover-pics">
                     <h3 className="upload-title">Cover pictures</h3>
-                    {coverPictures.map(pic => <img src={config.imageUrl + pic.image} alt={pic.image} key={pic.image} onClick={() => editImage(pic.image)} />)}
+                    {coverPictures.map(pic => <img src={pic.image} alt={pic.image} key={pic.image} onClick={() => editImage(pic.image)} />)}
                 </div>
 
             </div>

@@ -1,6 +1,5 @@
 import { format } from 'timeago.js';
 import "./style.css"
-import config from "../../../config.json";
 import { getUser } from '../../../components/services/userService';
 import axios from 'axios';
 import { useState, useEffect } from 'react';
@@ -30,13 +29,12 @@ const Message = ({ message, own, user, currentChat }) => {
 
 
 
-    const url = config.imageUrl
 
     console.count('MESSAGE COMPONENT');
     return (
         <div className={own ? "message own" : "message"}>
             <div className="messageTop">
-                <img className='messageImg' src={own ? url + user.profilePicture : url + recipient.profilePicture} alt={own ? user.username : recipient.username} />
+                <img className='messageImg' src={own ? user.profilePicture : recipient.profilePicture} alt={own ? user.username : recipient.username} />
                 <p className="messageText">{message?.text} </p>
             </div>
             <time className="time">

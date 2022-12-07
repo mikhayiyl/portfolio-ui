@@ -3,7 +3,6 @@ import { Link, Navigate, NavLink, useLocation, useParams } from "react-router-do
 import "./style.scss"
 import { getProfilePosts } from "../../components/services/PostsService";
 import friend, { getFollowers, getFollowings } from "../../components/services/userService";
-import config from "../../config.json"
 import { ProfileContainer, ProfileCover, ProfileCoverpageImage, ProfileTop, ProfileRightWrapper, ProfileUserDescription, ProfileUserImage, ProfileUserInfo, ProfileUsername, ProfileList, ProfileFriends, ProfileListItem, CameraIcon, ProfileUserImageBox, CoverImageBox } from "./ProfileStyles";
 import { Add, CancelSharp, Chat, Remove } from "@material-ui/icons";
 import Header from "../../components/Header";
@@ -291,7 +290,6 @@ const Profile = ({ state, dispatch }) => {
 
   console.count("PROFILE COMPONENT");
 
-  const url = config.imageUrl;
 
   if (isLoading) return <LoadingIndicator />;
   if (!user) return <Navigate to='/home' />
@@ -349,7 +347,7 @@ const Profile = ({ state, dispatch }) => {
               <CoverImageBox>
 
                 <ProfileCoverpageImage
-                  src={url + profile.coverPicture}
+                  src={profile.coverPicture}
                   alt={profile.username}
                 />
 
@@ -358,7 +356,7 @@ const Profile = ({ state, dispatch }) => {
               </CoverImageBox>
               <ProfileUserImageBox>
                 <ProfileUserImage
-                  src={url + profile.profilePicture}
+                  src={profile.profilePicture}
                   alt={profile.username}
                 />
                 {id === user._id && <CameraIcon onClick={() => { setIsOpen(true); openUpload(true); setType("profile") }} />}
@@ -373,7 +371,7 @@ const Profile = ({ state, dispatch }) => {
                 {friends.length} friends
               </span>
               {friends.slice(0, 6).map(friend => <div key={friend._id}>
-                <img src={url + friend.profilePicture} alt={friend.profilePicture} className="profileImg" />
+                <img src={friend.profilePicture} alt={friend.profilePicture} className="profileImg" />
               </div>)}
 
             </ProfileFriends>
@@ -420,7 +418,6 @@ const Profile = ({ state, dispatch }) => {
               unFriendUser={unFriendUser}
               unFollowUser={unFollowUser}
               followUser={followUser}
-              url={url}
               state={state}
               dispatch={dispatch}
               cancelRequest={cancelRequest}

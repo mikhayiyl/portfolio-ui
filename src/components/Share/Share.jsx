@@ -3,7 +3,6 @@ import axios from "axios";
 import { EmojiEmotions, Image, LocationOn, Send } from "@material-ui/icons";
 import { FaTag } from "react-icons/fa";
 import http from "../services/httpService";
-import config from "../../config.json"
 import {
   CancelImage,
   Preview,
@@ -22,7 +21,8 @@ import {
 } from "./ShareStyles";
 import { Link } from "react-router-dom";
 import logger from "../services/logger";
-
+import { getStorage, ref, uploadBytesResumable, getDownloadURL } from "firebase/storage";
+import app from "../common/Firebase";
 const url = "/uploads"
 
 const Share = ({ name, theme, user }) => {
@@ -41,17 +41,50 @@ const Share = ({ name, theme, user }) => {
 
 
     if (file) {
-      const data = new FormData();
-      data.append("file", file);
-      data.append("id", user._id);
-      data.append("desc", description);
+      const fileName = new Date().getTime() + file.name;
 
-      try {
-        await axios.post(url, data)
-        window.location.reload();
-      } catch (error) {
-        logger.log(error);
-      }
+
+
+      const storage = getStorage(app);
+      const storageRef = ref(storage, fileName);
+
+
+
+      const uploadTask = uploadBytesResumable(storageRef, file);
+
+      // Register three observers:
+      // 1. 'state_changed' observer, called any time the state changes
+      // 2. Error observer, called on failure
+      // 3. Completion observer, called on successful completion
+      uploadTask.on('state_changed',
+        (snapshot) => {
+          // Observe state change events such as progress, pause, and resume
+          // Get task progress, including the number of bytes uploaded and the total number of bytes to be uploaded
+          const progress = (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
+          console.log('Upload is ' + progress + '% done');
+          switch (snapshot.state) {
+            case 'paused':
+              console.log('Upload is paused');
+              break;
+            case 'running':
+              console.log('Upload is running');
+              break;
+            default:
+          }
+        },
+        (error) => {
+          // Handle unsuccessful uploads
+          logger.log(error)
+        },
+        () => {
+          // Handle successful uploads on complete
+          getDownloadURL(uploadTask.snapshot.ref).then(async (downloadURL) => {
+            console.log('File available at', downloadURL);
+            await axios.post(url, { userId: user._id, file: downloadURL, description, name: file.name, })
+          }).then(() => window.location.reload()
+          ).catch(ex => logger.log(ex))
+        }
+      );
     }
 
 
@@ -75,7 +108,7 @@ const Share = ({ name, theme, user }) => {
           <ShareTopWrapper>
             <Link to={`/profile/${user._id}`} className="link">
               <ProfileImg
-                src={config.imageUrl + user.profilePicture}
+                src={user.profilePicture}
                 alt={user.username}
                 className="shareProfileImg"
               />

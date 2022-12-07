@@ -2,7 +2,6 @@ import { useState, useEffect } from "react";
 import Icon from "../common/Icons/Icons";
 import Logo from "../common/Logo/Logo";
 import SearchInput from "../common/SearchInput";
-import config from "../../config.json"
 import {
   NavBarRight,
   NavBarLinks,
@@ -119,7 +118,7 @@ const Navbar = ({ state, Dispatch }) => {
           <Icon count={0} icon={<NotificationsActive className="icons" />} />
         </NavbarIcons>
         <NavBarProfile onClick={openProfilebar}>
-          <ProfilePicture src={config.imageUrl + state.user.profilePicture} alt={state.user.username} />
+          <ProfilePicture src={state.user.profilePicture} alt={state.user.username} />
         </NavBarProfile>
       </NavBarRight>
     </>

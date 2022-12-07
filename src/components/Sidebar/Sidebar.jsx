@@ -22,7 +22,6 @@ import {
 
 import http from "../services/httpService";
 import { getFriends } from "../services/userService"
-import config from "../../config.json"
 import { Link } from "react-router-dom";
 import logger from "../services/logger";
 export default class Sidebar extends Component {
@@ -55,13 +54,12 @@ export default class Sidebar extends Component {
   render() {
     const { currentUserFriends } = this.state;
     const { profilePicture, username, _id } = this.user
-    const url = config.imageUrl;
     console.count('SIDEBAR COMPONENT')
     return (
       <div>
         <Link to={`/profile/${_id}`} className='link'>
           <SidebarProfile>
-            <SidebarProfileImg src={url + profilePicture} alt={username} />
+            <SidebarProfileImg src={profilePicture} alt={username} />
             <SidebarProfileName>{username}</SidebarProfileName>
           </SidebarProfile>
         </Link>
@@ -116,7 +114,7 @@ export default class Sidebar extends Component {
 
             <SidebarListItem key={friend._id}>
               <Link to={`/profile/${friend._id}`} className="link">
-                <SidebarImg src={url + friend.profilePicture} alt={friend.username} />
+                <SidebarImg src={friend.profilePicture} alt={friend.username} />
                 <SidebarSpan className="friendName">
                   {friend.username}
                 </SidebarSpan>

@@ -1,4 +1,3 @@
-import config from "../../config.json"
 import {
   BirthdayContainer,
   BirthdayIcon,
@@ -34,7 +33,6 @@ const RightSideBar = ({ setcurrentChat, setFriend, setIsOpen, user, onlineFriend
   }
 
   console.count('RIGHTSIDEBAR COMPONENT');
-  const url = config.imageUrl;
   return (
     <>
       <div>
@@ -55,7 +53,7 @@ const RightSideBar = ({ setcurrentChat, setFriend, setIsOpen, user, onlineFriend
 
                 <ProfileImgContainer>
                   <ProfileImageIcon
-                    src={url + friend.profilePicture}
+                    src={friend.profilePicture}
                     alt={friend.username}
                   />
                   <div className="chatOnlineBadge"></div>

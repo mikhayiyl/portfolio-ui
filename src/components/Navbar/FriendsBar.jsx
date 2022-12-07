@@ -1,6 +1,5 @@
 import { useState } from 'react';
 import friend from '../services/userService';
-import config from "../../config.json";
 import { Btns, Cancel, Friends, FriendsContainer, FriendsRequests, Profile, ProfileImg, ProfileName, Wrapper } from './NavbarStyles'
 import { Link } from 'react-router-dom';
 import { acceptUser, rejectUser } from '../context/AppContext/ApiCalls';
@@ -36,7 +35,6 @@ const FriendsBar = ({ onOpen, state, Dispatch }) => {
 
 
 
-    const url = config.imageUrl;
 
     console.count("FRIENDS BAR COMPONENT",);
     return (
@@ -45,7 +43,7 @@ const FriendsBar = ({ onOpen, state, Dispatch }) => {
             {state.requests.map(user => <FriendsRequests key={user._id}>
                 <Link to={`/profile/${user._id}`} className="link">
                     <Profile>
-                        <ProfileImg src={url + user.profilePicture} alt={user.username} />
+                        <ProfileImg src={user.profilePicture} alt={user.username} />
                         <ProfileName>{user.username}</ProfileName>
                     </Profile>
                 </Link>
@@ -61,7 +59,7 @@ const FriendsBar = ({ onOpen, state, Dispatch }) => {
                         {user._id !== currentuser._id && <div style={{ display: 'flex', justifyContent: 'space-between', width: '70%' }}>
 
                             <Link onClick={onOpen} to={`/profile/${user._id}`} className='link'> <Profile >
-                                <ProfileImg src={url + user.profilePicture} alt={user.username} />
+                                <ProfileImg src={user.profilePicture} alt={user.username} />
                                 <ProfileName>{user.username}</ProfileName>
                             </Profile>
                             </Link>

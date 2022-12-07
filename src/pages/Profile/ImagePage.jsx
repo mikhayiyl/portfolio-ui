@@ -1,6 +1,5 @@
 import React from 'react'
 import { useNavigate, useParams } from 'react-router-dom'
-import config from "../../config.json"
 import styled from 'styled-components'
 
 const Container = styled.div`
@@ -35,11 +34,10 @@ const ImagePage = () => {
     const navigate = useNavigate()
 
 
-    const url = config.imageUrl
     return (
         <Container>
             <Button onClick={() => navigate(-1)} className="btn btn-info btn-sm">Back</Button>
-            <Image src={url + id} alt={id} />
+            <Image src={id} alt={id} />
 
         </Container>
     )
