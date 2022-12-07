@@ -27,7 +27,7 @@ const FriendsBar = ({ onOpen, state, Dispatch }) => {
             </FriendsRequests>)}
             <Wrapper>
                 <h6>Search Friends</h6>
-                {state.otherUsers.map(user => <Friend key={user._id} user={user} Dispatch={Dispatch} />
+                {state.otherUsers.map(user => <Friend key={user._id} state={state} user={user} Dispatch={Dispatch} onOpen={onOpen} />
 
 
 
@@ -46,7 +46,7 @@ const FriendsBar = ({ onOpen, state, Dispatch }) => {
 
 export default FriendsBar
 
-const Friend = ({ user, Dispatch }) => {
+const Friend = ({ state, user, Dispatch, onOpen }) => {
 
 
 

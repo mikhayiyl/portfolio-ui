@@ -154,8 +154,7 @@ export const Burger = styled.div`
   width: 34px;
   height: 6px;
   border-radius: 10px;
-  background: #fff;
-
+  background: white;
   transition: all 0.5s ease-in-out;
 
   &::before {
@@ -165,7 +164,7 @@ export const Burger = styled.div`
     width: 34px;
     height: 6px;
     border-radius: 10px;
-    background: #fff;
+    background: white;
   }
 
   &::after {
@@ -177,7 +176,7 @@ export const Burger = styled.div`
 
     height: 6px;
     border-radius: 10px;
-    background: #fff;
+    background: white;
   }
 
   &.open {
@@ -200,7 +199,7 @@ display: none;
 cursor: pointer;
 font-size: 2rem;
 margin: 0 4rem;
-color: #fff;
+color: white;
 ${mobile({ fontSize: "1.5rem", display: "block" })};
 `
 
