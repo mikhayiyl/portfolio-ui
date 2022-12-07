@@ -22,7 +22,7 @@ export default Followers
 
 
 
-const Follower = ({ follower, followUser, unFollowUser, user, url }) => {
+const Follower = ({ follower, followUser, unFollowUser, user, }) => {
     const [open, setOpen] = useState(false)
     const [isFollowed, setIsFollowed] = useState(user.following.includes(follower._id));
 
@@ -46,7 +46,7 @@ const Follower = ({ follower, followUser, unFollowUser, user, url }) => {
         <div className="info" onClick={() => setOpen(false)}>
             <Link to={`/profile/${follower._id}`} className="link" >
 
-                <img src={url + follower.profilePicture} alt={follower.username} className="profileImg" />
+                <img src={follower.profilePicture} alt={follower.username} className="profileImg" />
                 <div>
                     <h6>{follower.username}</h6>
                     <p>{follower.followers.length} followers</p>
