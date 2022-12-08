@@ -1,5 +1,7 @@
+import { SendOutlined } from "@material-ui/icons";
 import { FaFacebook, FaGithub, FaInstagram, FaTwitter } from "react-icons/fa";
 import { animateScroll } from "react-scroll/modules";
+import Ratings from "../common/Ratings";
 import {
   FooterContainer,
   FooterWrap,
@@ -14,6 +16,9 @@ import {
   SocialIcons,
   SocialIconLink,
   WebsiteRights,
+  InputContainer,
+  Input,
+  Button,
 } from "./Style";
 const Footer = () => {
   const toggleHome = () => {
@@ -21,6 +26,12 @@ const Footer = () => {
   };
   return (
     <FooterContainer>
+      <InputContainer>
+        <Input placeholder='message' className="form-control" />
+        <Button>
+          <SendOutlined />
+        </Button>
+      </InputContainer>
       <FooterWrap>
         <FooterLinksContainer>
           <FooterLinkWrapper>
@@ -85,6 +96,7 @@ const Footer = () => {
           </SocialMediaWrap>
         </SocialMedia>
       </FooterWrap>
+      <Ratings />
     </FooterContainer>
   );
 };

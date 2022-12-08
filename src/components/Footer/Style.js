@@ -1,9 +1,42 @@
 import styled from "styled-components";
 import { Link } from "react-router-dom";
+import { mobile } from "../../ResponsiveDesigns";
 
 export const FooterContainer = styled.footer`
   background-color: #333;
+  padding: 10px;
 `;
+
+
+export const InputContainer = styled.div`
+margin: 0 auto;
+width: 50%;
+height: 40px;
+background-color:#fff;
+display: flex;
+justify-content: space-between;
+border: 1px solid gray;
+border-radius: 5px;
+${mobile({ width: "80%" })}
+
+`
+export const Input = styled.input`
+border: none;
+flex: 8;
+padding-left: 20px;
+`
+export const Button = styled.button`
+flex: 1;
+border: none;
+color:#fff;
+background-color:teal ;
+
+`
+
+
+
+
+
 export const FooterWrap = styled.div`
   padding: 48px 24px;
   display: flex;
