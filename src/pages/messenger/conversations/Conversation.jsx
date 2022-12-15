@@ -1,8 +1,27 @@
 import "./style.scss";
 import { useState, useEffect } from 'react';
+import axios from "axios";
+import asyncErrors from "../../../components/middleware/AsyncErrors";
 const Conversation = ({ conversation, state }) => {
     const [user, setUser] = useState({});
     const [isOnline, setIsOnline] = useState(true);
+    const [unreadTexts, setUnreadTexts] = useState([])
+
+
+    useEffect(() => {
+        const cancelToken = axios.CancelToken.source();
+        const populateTexts = asyncErrors(async () => {
+            const { data } = await axios.get(`/messages/unreadchats/${state.user._id}/${conversation._id}`, { cancelToken: cancelToken.token });
+            setUnreadTexts(data);
+
+        });
+        populateTexts()
+
+        return () => {
+            cancelToken.cancel();
+        }
+    }, [state.user._id, conversation._id])
+
 
 
 
@@ -23,11 +42,18 @@ const Conversation = ({ conversation, state }) => {
 
 
 
-
     return (
         <div className="conversation">
             <div className="image-Box">
-                <img src={user.profilePicture} alt={user.username} className="conversationImg profileImg" />
+                {/* <img src={user.profilePicture} alt={user.username} className="conversationImg profileImg" /> */}
+                <img src="/assets/beach.jpg" alt={user.username} className="conversationImg profileImg" />
+                {unreadTexts.length > 0 &&
+                    <div className="total-chats">
+                        <span className="badge ">
+                            {unreadTexts.length}
+                        </span>
+
+                    </div>}
                 {isOnline && <div className="chatOnlineBadge"></div>}
             </div>
             <span className="conversationName">{user?.username}</span>

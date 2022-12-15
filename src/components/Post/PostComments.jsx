@@ -36,7 +36,7 @@ const PostComments = ({ id, comments, setComments, onDelete, spam, theme, curren
 
     //scroll effect
     useEffect(() => {
-        scrollRef.current?.scrollIntoView({ behaviour: "smooth" })
+        scrollRef.current?.scrollIntoView({ behaviour: "smooth", block: "nearest", inline: "start" })
 
     }, [comments])
 

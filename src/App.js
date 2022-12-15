@@ -7,15 +7,14 @@ import { allUsers, currentuser, friendRequests, otherUsers } from "./components/
 import AppContext from "./components/context/AppContext/AppContext";
 import { useContext } from "react";
 import { getFriends } from './components/services/userService';
-import logger from './components/services/logger';
 import LoadingIndicator from './components/common/LoadingIndicator';
+import asyncErrors from './components/middleware/AsyncErrors';
 const App = () => {
     const { state, dispatch } = useContext(AppContext);
     const [friends, setFriends] = useState([]);
     const socket = useRef();
 
 
-    logger.log(state.error)
 
     //socket
     useEffect(() => {
@@ -44,18 +43,12 @@ const App = () => {
     useEffect(() => {
         if (!state.user) return;
         const cancelToken = axios.CancelToken.source();
-        async function populateFriends() {
-
-            try {
-                dispatch({ type: "API_CALL" });
-                const { data } = await getFriends(state.user._id, { cancelToken: cancelToken.token });
-                setFriends(data);
-                dispatch({ type: "API_SUCCESS" });
-            } catch (error) {
-                dispatch({ type: "API_CALL_FAILURE" });
-                logger.log(error);
-            }
-        }
+        const populateFriends = asyncErrors(async () => {
+            dispatch({ type: "API_CALL" });
+            const { data } = await getFriends(state.user._id, { cancelToken: cancelToken.token });
+            setFriends(data);
+            dispatch({ type: "API_SUCCESS" });
+        })
         populateFriends();
 
         return () => {
@@ -93,12 +86,6 @@ const App = () => {
         currentuser(dispatch, { cancelToken: cancelToken.token })
         allUsers(dispatch, { cancelToken: cancelToken.token });
         friendRequests(dispatch, { cancelToken: cancelToken.token })   //all friend Requests
-
-
-
-
-
-
         return () => {
             cancelToken.cancel();
         }
@@ -110,13 +97,12 @@ const App = () => {
         const cancelToken = axios.CancelToken.source();
 
         otherUsers(dispatch, { cancelToken: cancelToken.token });
-
-
         return () => {
             cancelToken.cancel();
         }
 
     }, [state.requests, dispatch])
+
 
 
 

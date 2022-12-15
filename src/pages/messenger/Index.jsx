@@ -5,17 +5,16 @@ import Header from "../../components/Header"
 import Messenger from './Messenger';
 import messenger from '../../components/services/chatApi';
 import logger from '../../components/services/logger';
+import asyncErrors from '../../components/middleware/AsyncErrors';
 
 
 const Index = ({ state, dispatch }) => {
-    const { user, currentChat, onlinefriends } = state;
     const [messages, setMessages] = useState([]);
     const [newMessage, setNewMessage] = useState('');
-    const livechats = state.livechats
     const [typing, setTyping] = useState('');
     const [searchQuery, setSearchQuery] = useState('');
     const [conversations, setConversations] = useState([]);
-    const socket = state.socket;
+    const { user, currentChat, onlinefriends, socket, livechats, } = state;
 
 
     //typing status
@@ -55,18 +54,15 @@ const Index = ({ state, dispatch }) => {
 
         const filteruser = state.allusers.find(user => user.username.startsWith(searchQuery.toLowerCase()))
         const cancelToken = axios.CancelToken.source();
-        (async function populateConversations() {
-            try {
-                const { data } = await messenger.getConversations(user._id, { cancelToken: cancelToken.token });
-                const filtered = data.filter(c => c.users.includes(filteruser._id)
+        const populateConversations = asyncErrors(async () => {
+            const { data } = await messenger.getConversations(user._id, { cancelToken: cancelToken.token });
+            const filtered = data.filter(c => c.users.includes(filteruser._id)
 
-                )
-                setConversations((filteruser && searchQuery) ? filtered : data);
+            )
+            setConversations((filteruser && searchQuery) ? filtered : data);
+        })
 
-            } catch (error) {
-                logger.log(error);
-            }
-        }())
+        populateConversations()
 
 
         return () => {
@@ -79,14 +75,12 @@ const Index = ({ state, dispatch }) => {
     useEffect(() => {
         if (!currentChat) return;
         const cancelToken = axios.CancelToken.source();
-        (async function populateMessages() {
-            try {
-                const { data } = await messenger.getMessages(currentChat._id, { cancelToken: cancelToken.token });
-                setMessages(data);
-            } catch (error) {
-                logger.log(error);
-            }
-        }())
+        const populateMessages = asyncErrors(async () => {
+            const { data } = await messenger.getMessages(currentChat._id, { cancelToken: cancelToken.token });
+            setMessages(data);
+
+        })
+        populateMessages()
 
         return () => {
             cancelToken.cancel();
@@ -97,9 +91,11 @@ const Index = ({ state, dispatch }) => {
 
     const handleSubmit = async (e) => {
         e.preventDefault();
+        const receiverId = currentChat.users.find(member => member !== user._id);
 
         const message = {
             sender: user._id,
+            recipient: receiverId,
             text: newMessage,
             conversationId: currentChat._id
         };
@@ -107,7 +103,6 @@ const Index = ({ state, dispatch }) => {
 
 
 
-        const receiverId = currentChat.users.find(member => member !== user._id);
         socket.emit('SEND_TEXT', {
             senderId: user._id,
             receiverId,
@@ -124,6 +119,24 @@ const Index = ({ state, dispatch }) => {
             logger.log(error);
         }
     }
+
+
+    //mark texts as read if chat is already open
+    useEffect(() => {
+        if (currentChat) {
+            const friendId = currentChat.users.find(member => member !== user._id);
+            (async function readText() {
+                await axios.put(`/messages/read/${user._id}`, { senderId: friendId })
+            }())
+        }
+
+
+    }, [currentChat, livechats, user._id])
+
+
+
+
+
 
 
 

@@ -4,6 +4,7 @@ import { Camera, Cancel } from '@material-ui/icons';
 import logger from '../../components/services/logger';
 import { getStorage, ref, uploadBytesResumable, getDownloadURL } from "firebase/storage";
 import app from "../../components/common/Firebase"
+import asyncErrors from '../../components/middleware/AsyncErrors';
 
 const Upload = ({ user, setIsOpen, openUpload, name, setProfile, profile }) => {
     const [file, setFile] = useState(null);
@@ -58,21 +59,16 @@ const Upload = ({ user, setIsOpen, openUpload, name, setProfile, profile }) => {
         );
     }
 
-    const editImage = async (image) => {
+    const editImage = asyncErrors(async (image) => {
         name === "profile" ? setProfile({ ...profile, profilePicture: image }) :
             setProfile({ ...profile, coverPicture: image });
         setIsOpen(false);
         openUpload(false)
-        try {
-            name === "profile" ?
-                await axios.put("/users/" + user._id, { profilePicture: image }) :
-                await axios.put("/users/" + user._id, { coverPicture: image });
+        name === "profile" ?
+            await axios.put("/users/" + user._id, { profilePicture: image }) :
+            await axios.put("/users/" + user._id, { coverPicture: image });
 
-        } catch (error) {
-            logger.log(error);
-        }
-
-    }
+    })
 
 
     return (

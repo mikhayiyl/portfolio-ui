@@ -7,6 +7,7 @@ const slice = createSlice({
         friendsNavMenu: false,
         profileNavMenu: false,
         searchMenu: false,
+        notification: false
     },
     reducers: {
         burgerOpenned: (menu, action) => {
@@ -15,6 +16,8 @@ const slice = createSlice({
                 menu.searchMenu = false;
                 menu.friendsNavMenu = false;
                 menu.profileNavMenu = false;
+                menu.notification = false;
+
             }
         },
         burgerClosed: (menu, action) => {
@@ -28,6 +31,8 @@ const slice = createSlice({
                 menu.searchMenu = false;
                 menu.mobileBurger = false;
                 menu.profileNavMenu = false;
+                menu.notification = false;
+
             }
         },
 
@@ -41,6 +46,8 @@ const slice = createSlice({
                 menu.friendsNavMenu = false;
                 menu.mobileBurger = false;
                 menu.searchMenu = false;
+                menu.notification = false;
+
             }
         },
 
@@ -54,20 +61,43 @@ const slice = createSlice({
                 menu.profileNavMenu = false;
                 menu.friendsNavMenu = false;
                 menu.mobileBurger = false;
+                menu.notification = false;
+
             }
         },
 
         searchMenuClosed: (menu, action) => {
             if (action.payload === "close") menu.searchMenu = false;
         },
+        notificationOpenned: (menu, action) => {
+            if (action.payload === "open") {
+                menu.notification = true;
+                menu.searchMenu = false;
+                menu.profileNavMenu = false;
+                menu.friendsNavMenu = false;
+                menu.mobileBurger = false;
+            }
+        },
 
+        notificationClosed: (menu, action) => {
+            if (action.payload === "close") menu.notification = false;
+        },
 
+        closeAll: (menu, action) => {
+            if (action.payload === "closeAll") {
+                menu.notification = false;
+                menu.searchMenu = false;
+                menu.profileNavMenu = false;
+                menu.friendsNavMenu = false;
+                menu.mobileBurger = false;
+            }
+        },
 
 
     }
 })
 
 export default slice.reducer;
-export const { burgerOpenned, friendsBarOpenned, profileBarOpenned, burgerClosed, friendsBarClosed, profileBarClosed, searchMenuOpenned, searchMenuClosed } = slice.actions;
+export const { burgerOpenned, friendsBarOpenned, profileBarOpenned, burgerClosed, friendsBarClosed, profileBarClosed, searchMenuOpenned, searchMenuClosed, notificationOpenned, notificationClosed, closeAll } = slice.actions;
 
 

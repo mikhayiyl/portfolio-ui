@@ -1,0 +1,67 @@
+.notification {
+  max-height: 30vh;
+  height: 20vh;
+  width: 30%;
+  background: #666;
+  position: absolute;
+  right: 0.4rem;
+  top: 2.7rem;
+  box-shadow: 0 0 2px 3px #000;
+  border-radius: 5px;
+  color: #fff;
+  padding: 5px;
+  overflow-y: scroll;
+
+  &-link {
+    color: #fff;
+    font-size: 1rem;
+    font-weight: 400;
+  }
+
+  &-ul {
+    padding: 0;
+    text-align: center;
+  }
+
+  &-li {
+    list-style: none;
+    margin: 0;
+  }
+
+  &-btn {
+    margin: 0 auto;
+    display: block;
+  }
+
+  @media only screen and (max-width: 1030px) {
+    width: 50%;
+  }
+
+  @media only screen and (max-width: 700px) {
+    width: 95%;
+    margin: 0 auto;
+  }
+
+  .exit {
+    position: sticky;
+    color: #fff;
+    background: #000;
+    border-radius: 50%;
+  }
+}
+
+.art {
+  display: flex;
+  margin-bottom: 1rem;
+  align-items: center;
+  background-color: #444;
+  padding: 5px;
+  border-radius: 0.3rem;
+  box-shadow: 0 0 3px 1px hotpink;
+  font-size: 0.95rem;
+
+  p {
+    margin: 0 3px;
+    text-transform: capitalize;
+  }
+}

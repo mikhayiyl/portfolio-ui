@@ -38,6 +38,11 @@ const HomeMessenger = ({ messages, newMessage, setNewMessage, onSubmit, user, cu
     }, [onlineUsers, friend])
 
 
+    const handleKey = e => {
+        if (newMessage.length > 0 && e.key === "Enter") {
+            onSubmit(e)
+        }
+    }
 
 
     return (
@@ -45,7 +50,7 @@ const HomeMessenger = ({ messages, newMessage, setNewMessage, onSubmit, user, cu
             <div className="messenger-top">
                 <Link to={`/profile/${friend._id}`} className='link'>
                     <div className="imgContainer">
-                        <img src={ friend.profilePicture} alt={friend.username} className="profileImg" />
+                        <img src={friend.profilePicture} alt={friend.username} className="profileImg" />
                         {isOnline && <div className="chatOnlineBadge"></div>}
                     </div>
                     <span className="messenger-info">
@@ -68,6 +73,7 @@ const HomeMessenger = ({ messages, newMessage, setNewMessage, onSubmit, user, cu
             <div className="text-area">
                 <input
                     value={newMessage}
+                    onKeyDown={e => handleKey(e)}
                     onChange={(e) => setNewMessage(e.target.value)}
                     placeholder="start conversation..." className='form-control m-1'></input>
                 <SendRounded

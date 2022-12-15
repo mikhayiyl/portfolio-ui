@@ -5,7 +5,7 @@ import Main from "../../components/Main";
 import axios from "axios";
 import { getPosts } from "../../components/services/PostsService";
 import { useEffect, useState } from "react";
-import logger from "../../components/services/logger";
+import asyncErrors from "../../components/middleware/AsyncErrors";
 
 
 const Home = ({ user }) => {
@@ -15,15 +15,12 @@ const Home = ({ user }) => {
   useEffect(() => {
     const cancelToken = axios.CancelToken.source();
 
-    (async function loadPosts() {
-      try {
-        const { data } = await getPosts({ cancelToken: cancelToken.token });
-        setPosts(data);
-      } catch (error) {
-        logger.log(error);
-      }
-    }())
+    const loadPosts = asyncErrors(async () => {
+      const { data } = await getPosts({ cancelToken: cancelToken.token });
+      setPosts(data);
+    })
 
+    loadPosts();
 
     return () => {
       cancelToken.cancel();

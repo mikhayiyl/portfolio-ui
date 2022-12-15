@@ -13,6 +13,8 @@ import Settings from '../pages/settings/Settings';
 import Contact from '../pages/Help & support/Contact';
 import Display from '../pages/Display/Display';
 import ImagePage from '../pages/Profile/ImagePage';
+import LoadingIndicator from './common/LoadingIndicator';
+import Notification from '../pages/notifications/Notification';
 
 
 const GlobalStyles = createGlobalStyle`
@@ -40,7 +42,7 @@ const Index = ({ state, dispatch }) => {
   const user = state.user
   const theme = state.theme
 
-  if (state.jwtUser && !user) return <p>xxxxxxxxxxxxxxxxxxxxxxxxx</p>
+  if (state.jwtUser && !user) return <LoadingIndicator />
 
   return (
     <React.Fragment>
@@ -56,6 +58,7 @@ const Index = ({ state, dispatch }) => {
         <Route path="/signout" element={<Logout />} />
         <Route path="/savedposts" element={<SavedPosts user={user} />} />
         <Route path="/messenger" element={<Messenger dispatch={dispatch} state={state} />} />
+        <Route path="/notifications" element={<Notification dispatch={dispatch} state={state} />} />
         <Route path="/settings" element={<Settings />} />
         <Route path="/display" element={<Display dispatch={dispatch} theme={theme} />} />
         <Route path="/help" element={<Contact theme={theme} />} />

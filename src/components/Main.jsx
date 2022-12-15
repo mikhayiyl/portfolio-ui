@@ -11,7 +11,9 @@ import { SidebarContainer } from "./Sidebar/SidebarStyles";
 import { RightBarContainer } from "./RightSideBar/RightBarStyles";
 import { FeedBox, FeedContainer } from "./Feed/FeedStyles";
 import AppContext from "./context/AppContext/AppContext";
-import logger from "./services/logger";
+import { closeAll } from "../store/menu";
+import { useDispatch } from "react-redux";
+import asyncErrors from "./middleware/AsyncErrors";
 
 const HomeContainer = styled.main`
   width: 100%;
@@ -49,14 +51,13 @@ const Main = ({ posts }) => {
     useEffect(() => {
         const cancelToken = axios.CancelToken.source();
         if (!currentChat) return;
-        (async function populateMessages() {
-            try {
-                const { data } = await messenger.getMessages(currentChat._id, { cancelToken: cancelToken.token });
-                setMessages(data);
-            } catch (error) {
-                logger.log(error);
-            }
-        }())
+        const populateMessages = asyncErrors(async () => {
+            const { data } = await messenger.getMessages(currentChat._id, { cancelToken: cancelToken.token });
+            setMessages(data);
+
+        })
+
+        populateMessages();
 
         return () => {
             cancelToken.cancel();
@@ -65,54 +66,47 @@ const Main = ({ posts }) => {
 
 
     //send text
-    const handleSubmit = async (e) => {
+    const handleSubmit = asyncErrors(async (e) => {
         e.preventDefault();
+        const receiverId = currentChat.users.find(member => member !== user._id);
 
         const message = {
             sender: user._id,
+            recipient: receiverId,
             text: newMessage,
             conversationId: currentChat._id
         }
 
 
-        const receiverId = currentChat.users.find(member => member !== user._id);
         state.socket.emit('SEND_TEXT', {
             senderId: user._id,
             receiverId,
             text: newMessage,
         })
 
+        const { data } = await messenger.createMessage(message);
+        setMessages([...messages, data]);
+        setNewMessage('');
 
-        try {
-            const { data } = await messenger.createMessage(message);
-            setMessages([...messages, data]);
-            setNewMessage('');
-
-        } catch (error) {
-            logger.log(error);
-        }
     }
-
+    )
 
     //report post
-    const spamPost = async (postId) => {
-        try {
-            await reportPost(postId);
-            window.location.reload();
-
-        } catch (error) {
-            logger.log(error);
-        }
-    }
+    const spamPost = asyncErrors(async (postId) => {
+        await reportPost(postId);
+        window.location.reload();
+    })
 
     const theme = state.theme;
     const user = state.user;
 
     console.count('RIGHTSIDEBAR COMPONENT');
+    const dispatch = useDispatch();
 
 
     return (
-        <HomeContainer >
+        <HomeContainer onClick={() => dispatch(closeAll("closeAll"))
+        } >
             {open && <HomeMessenger
                 onSubmit={handleSubmit}
                 messages={messages}

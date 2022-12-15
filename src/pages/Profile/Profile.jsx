@@ -13,6 +13,7 @@ import { acceptUser, rejectUser, startChat } from "../../components/context/AppC
 import Upload from "./Upload";
 import logger from "../../components/services/logger";
 import LoadingIndicator from "../../components/common/LoadingIndicator";
+import asyncErrors from "../../components/middleware/AsyncErrors";
 
 
 
@@ -77,7 +78,7 @@ const Profile = ({ state, dispatch }) => {
     }
   }
 
-  const cancelRequest = async (Id) => {
+  const cancelRequest = (Id) => {
     setFriendRequests(friendRequests.filter(r => r !== user._id))
     rejectUser(dispatch, Id)
   }
@@ -91,9 +92,10 @@ const Profile = ({ state, dispatch }) => {
   const unFriendUser = async (ID) => {
     try {
       setIsLoading(true);
-      setIsFriend(false);
       if (user._id === id) setFriends(friends.filter(fr => fr._id !== ID));
+      setIsFriend(false);
       await friend.unFriendUser(user._id, ID);
+      setIsLoading(false);
     } catch (error) {
       setIsLoading(false);
       logger.log(error);
@@ -131,17 +133,12 @@ const Profile = ({ state, dispatch }) => {
   //profile posts
   useEffect(() => {
     const cancelToken = axios.CancelToken.source();
-    (async function getPosts() {
-      try {
-        const { data } = await getProfilePosts(id, { cancelToken: cancelToken.token });
-        setPosts(data)
-        setIsLoading(false);
-      } catch (error) {
-        setIsLoading(false);
-        logger.log(error);
-      }
-
-    }())
+    const getPosts = asyncErrors(async () => {
+      const { data } = await getProfilePosts(id, { cancelToken: cancelToken.token });
+      setPosts(data)
+      setIsLoading(false);
+    })
+    getPosts();
 
     return () => {
       setIsLoading(false);
@@ -155,20 +152,15 @@ const Profile = ({ state, dispatch }) => {
   useEffect(() => {
     const cancelToken = axios.CancelToken.source();
 
-    (async function getProfileUserFriends() {
+    const getProfileUserFriends = asyncErrors(async () => {
       if (!id) return;
 
-      try {
-        const { data } = await friend.getFriends(id, { cancelToken: cancelToken.token });
-        setFriends(data)
-        setIsLoading(false);
+      const { data } = await friend.getFriends(id, { cancelToken: cancelToken.token });
+      setFriends(data)
+      setIsLoading(false);
 
-      } catch (error) {
-        setIsLoading(false);
-        logger.log(error);
-      }
-
-    }())
+    });
+    getProfileUserFriends();
 
     return () => {
       setIsLoading(false);
@@ -187,38 +179,22 @@ const Profile = ({ state, dispatch }) => {
 
 
     // followings and followers
-    async function getProfileFollowings() {
-      try {
-        setIsLoading(true);
-        const { data } = await getFollowings(id, { cancelToken: cancelToken.token });
-
-        setFollowings(data);
-        setIsLoading(false);
-
-      } catch (error) {
-        if (error === "CanceledError") {
-          setIsLoading(false);
-          logger.log(error.message);
-        }
-      }
-    }
+    const getProfileFollowings = asyncErrors(async () => {
+      setIsLoading(true);
+      const { data } = await getFollowings(id, { cancelToken: cancelToken.token });
+      setFollowings(data);
+      setIsLoading(false);
+    })
     getProfileFollowings();
 
 
-    async function getProfileFollowers() {
-      try {
-        setIsLoading(true);
-        const { data } = await getFollowers(id, { cancelToken: cancelToken.token });
-        setFollowers(data)
-        setIsLoading(false);
-      } catch (error) {
-        if (error === "CanceledError") {
-          logger.log(error.message);
-          setIsLoading(false);
-        }
-      }
-    }
+    const getProfileFollowers = asyncErrors(async () => {
+      setIsLoading(true);
+      const { data } = await getFollowers(id, { cancelToken: cancelToken.token });
+      setFollowers(data)
+      setIsLoading(false);
 
+    })
 
 
     getProfileFollowers();

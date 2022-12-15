@@ -9,9 +9,16 @@ const ChatBox = ({ messages, newMessage, setNewMessage, onSubmit, currentChat, t
     const scrollRef = useRef();
     //scroll effect
     useEffect(() => {
-        scrollRef.current?.scrollIntoView({ inline: "nearest", behaviour: "smooth" })
+        scrollRef.current?.scrollIntoView({ behaviour: "smooth", block: "nearest", inline: "start" })
 
     }, [messages])
+
+
+    const handleKey = e => {
+        if (newMessage.length > 0 && e.key === "Enter") {
+            onSubmit(e)
+        }
+    }
 
 
     console.count("CHATBOX");
@@ -32,6 +39,7 @@ const ChatBox = ({ messages, newMessage, setNewMessage, onSubmit, currentChat, t
                         </div>
                         <div className="chatBoxBottom">
                             <textarea
+                                onKeyDown={e => handleKey(e)}
                                 value={newMessage}
                                 onChange={(e) => setNewMessage(e.target.value)}
                                 placeholder="start conversation..." className='chatMessageInput form-control'></textarea>

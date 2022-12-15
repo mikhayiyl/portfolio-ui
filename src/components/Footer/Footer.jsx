@@ -1,4 +1,6 @@
 import { SendOutlined } from "@material-ui/icons";
+import axios from "axios";
+import { useRef } from "react";
 import { FaFacebook, FaGithub, FaInstagram, FaTwitter } from "react-icons/fa";
 import { animateScroll } from "react-scroll/modules";
 import Ratings from "../common/Ratings";
@@ -20,17 +22,34 @@ import {
   Input,
   Button,
 } from "./Style";
+
+import { currentUser } from "../services/authService"
+import asyncErrors from "../middleware/AsyncErrors";
 const Footer = () => {
+  const textRef = useRef();
+  const formRef = useRef();
+
+
   const toggleHome = () => {
     animateScroll.scrollToTop();
   };
+
+
+  const handleSubmit = asyncErrors(async (e) => {
+    e.preventDefault();
+    await axios.post("/messengers", { senderEmail: currentUser().email, text: textRef.current.value, project: "facebook-clone" })
+    formRef.current.reset()
+  })
+
+
   return (
     <FooterContainer>
-      <InputContainer>
-        <Input placeholder='message' className="form-control" />
-        <Button>
+      <InputContainer ref={formRef} onSubmit={handleSubmit}>
+
+        <Input type='text' placeholder='message' className="form-control" ref={textRef} required maxLength={255} />
+        <Button >
           <SendOutlined />
-        </Button>
+        </Button >
       </InputContainer>
       <FooterWrap>
         <FooterLinksContainer>

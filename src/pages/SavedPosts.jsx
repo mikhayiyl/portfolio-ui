@@ -4,7 +4,7 @@ import Header from '../components/Header'
 import Main from '../components/Main'
 import Footer from '../components/Footer/Footer'
 import { Navigate } from 'react-router-dom'
-import logger from '../components/services/logger'
+import asyncErrors from '../components/middleware/AsyncErrors'
 
 const SavedPosts = ({ user }) => {
 
@@ -15,16 +15,11 @@ const SavedPosts = ({ user }) => {
 
     //profile user saved posts 
     useEffect(() => {
-        async function getPosts() {
-            try {
-                const { data } = await getsavedPosts(user._id);
-                setPosts(data);
+        const getPosts = asyncErrors(async () => {
+            const { data } = await getsavedPosts(user._id);
+            setPosts(data);
 
-            } catch (error) {
-                logger.log(error)
-            }
-
-        }
+        })
         getPosts();
     }, [user])
 

@@ -12,25 +12,20 @@ import {
   FriendName,
 } from "./RightBarStyles";
 import { getConversation } from "../services/chatApi";
-import logger from "../services/logger";
+import axios from "axios";
+import asyncErrors from "../middleware/AsyncErrors";
 
 
 
 const RightSideBar = ({ setcurrentChat, setFriend, setIsOpen, user, onlineFriends }) => {
 
-  const openConversation = async (friend) => {
+  const openConversation = asyncErrors(async (friend) => {
     setIsOpen(true);
-    try {
-      const { data } = await getConversation(user._id, friend._id);
-      setFriend(friend);
-      setcurrentChat(data);
-    } catch (error) {
-
-      logger.log(error);
-
-    }
-
-  }
+    const { data } = await getConversation(user._id, friend._id);
+    await axios.put(`/messages/read/${user._id}`, { senderId: friend._id })
+    setFriend(friend);
+    setcurrentChat(data);
+  })
 
   console.count('RIGHTSIDEBAR COMPONENT');
   return (

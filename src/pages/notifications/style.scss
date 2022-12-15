@@ -1,0 +1,68 @@
+.main {
+  display: flex;
+  width: 100%;
+  background: pink;
+
+  @media only screen and (max-width: 768px) {
+    margin-top: 2.7rem;
+    flex-direction: column-reverse;
+  }
+
+  &-left {
+    flex: 25%;
+    overflow-y: scroll;
+    height: calc(100vh - 2.7rem);
+    position: sticky;
+    top: 2.7rem;
+
+    @media only screen and (max-width: 768px) {
+      display: none;
+    }
+  }
+
+  &-mid {
+    flex: 50%;
+    padding: 10px;
+    @supports (background-blend-mode: multiply) {
+      background-image: url("../../../public/assets/beach.jpg"),
+        radial-gradient(#222, #444);
+      background-blend-mode: multiply;
+      background-repeat: no-repeat;
+      background-attachment: fixed;
+      background-position: center;
+      background-size: cover;
+    }
+
+    .article {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 1rem;
+      padding: 5px;
+      border-radius: 0.3rem;
+      z-index: 1;
+      box-shadow: 0 0 3px 1px #fff;
+      span {
+        color: #fff;
+        display: flex;
+        p {
+          text-transform: capitalize;
+          margin: 0 1rem;
+          font-weight: 400;
+          font-size: 1rem;
+        }
+      }
+    }
+  }
+
+  &-right {
+    flex: 25%;
+    background: linear-gradient(#222, gray);
+    height: calc(100vh - 2.7rem);
+    position: sticky;
+    top: 2.7rem;
+    display: grid;
+    align-items: baseline;
+    padding: 10px;
+  }
+}

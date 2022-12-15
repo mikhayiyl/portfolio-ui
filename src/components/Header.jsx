@@ -7,6 +7,8 @@ import Navbar from './Navbar/Navbar';
 import { NavBarContainer } from './Navbar/NavbarStyles';
 import { useContext } from 'react';
 import AppContext from './context/AppContext/AppContext';
+import Notification from './notification/Notification';
+import { useSelector } from 'react-redux';
 const Container = styled.header`
     position: sticky;
     top: 0;
@@ -17,6 +19,8 @@ const Container = styled.header`
 `
 const Header = () => {
     const { state, dispatch } = useContext(AppContext);
+    const { notification } = useSelector(state => state.entities.menubars);
+
     const theme = state.theme
     const user = state.user
     return (
@@ -26,6 +30,7 @@ const Header = () => {
             </NavBarContainer>
             <MobileSidebar user={user} />
             <AsideMenu user={user} />
+            {notification && <Notification state={state} />}
         </Container>
     )
 }

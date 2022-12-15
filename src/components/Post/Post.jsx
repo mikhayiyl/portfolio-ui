@@ -35,10 +35,11 @@ import comment from "../services/Comments";
 import DottedMenu from "../common/DottedMenu";
 import { Link, useLocation } from "react-router-dom";
 import logger from "../services/logger";
+import asyncErrors from "../middleware/AsyncErrors";
 const Post = ({ post, reportPost, theme, currentuser }) => {
   const { _id, userId, description, media, likes, createdAt, spam } = post
 
-  const admin = currentuser === userId;
+  const admin = currentuser._id === userId;
 
   const [postLikes, setLikes] = useState(likes.length);
   const [user, setUser] = useState([]);
@@ -53,15 +54,11 @@ const Post = ({ post, reportPost, theme, currentuser }) => {
 
   useEffect(() => {
     const cancelToken = axios.CancelToken.source();
-    const getData = async () => {
-      try {
-        const { data: user } = await getUser(userId, { cancelToken: cancelToken.token });
-        setUser(user);
-      } catch (error) {
-        logger.log(error);
-      };
+    const getData = asyncErrors(async () => {
+      const { data: user } = await getUser(userId, { cancelToken: cancelToken.token });
+      setUser(user);
     }
-
+    )
     getData();
 
     return () => {
@@ -84,17 +81,12 @@ const Post = ({ post, reportPost, theme, currentuser }) => {
   useEffect(() => {
     let unsubscribed = false;
 
-    async function populateComments() {
+    const populateComments = asyncErrors(async () => {
       if (!unsubscribed) {
-        try {
-          const { data } = await comment.postComments(_id);
-          setComments(data);
-        } catch (error) {
-          logger.log(error);
-        }
-
+        const { data } = await comment.postComments(_id);
+        setComments(data);
       }
-    }
+    })
     populateComments();
 
 
@@ -122,19 +114,11 @@ const Post = ({ post, reportPost, theme, currentuser }) => {
   }
 
   //savePost
-  const savePost = async () => {
+  const savePost = asyncErrors(async () => {
     setOpenSidebar(false);
-    try {
-      await postapi.savePost(_id, currentuser._id);
-      toast.info("Post saved successfully");
-
-    } catch (error) {
-      if (error && error.response.status === 400) {
-        toast.warn("Post Already Saved");
-      }
-      logger.log(error);
-    }
-  }
+    await postapi.savePost(_id, currentuser._id);
+    toast.info("Post saved successfully");
+  })
 
 
 
@@ -170,49 +154,37 @@ const Post = ({ post, reportPost, theme, currentuser }) => {
   };
 
   //delete post 
-  const handleDelete = async (id) => {
+  const handleDelete = asyncErrors(async (id) => {
+    if (admin) {
+      await postapi.deletePost(id);
 
-    try {
-      if (admin) {
-        await postapi.deletePost(id);
-
-      } else {
-        await postapi.deleteSavedPost(id, currentuser._id);
-      }
-
-      window.location.reload();
-    } catch (error) {
-      logger.log(error);
+    } else {
+      await postapi.deleteSavedPost(id, currentuser._id);
     }
-  }
+
+    window.location.reload();
+  })
   //delete shared post 
-  const removeSharedPost = async (id) => {
+  const removeSharedPost = asyncErrors(async (id) => {
 
-    try {
+    await postapi.deletesharedPost(id, currentuser._id);
 
-      await postapi.deletesharedPost(id, currentuser._id);
+    window.location.reload();
 
-      window.location.reload();
-    } catch (error) {
-      logger.log(error);
-    }
-  }
+  })
 
   //share post 
-  const sharePost = async (post) => {
-    try {
-      await postapi.sharePost(_id, currentuser._id);
-      toast.success("post shared successfully");
-    } catch (error) {
-      toast.error(error.response.data);
-      logger.log(error);
-    }
-  }
+  const sharePost = asyncErrors(async (post) => {
+    await postapi.sharePost(_id, currentuser._id);
+    toast.success("post shared successfully");
+  })
+
+
 
 
   console.count('postComponent');
   return (
-    <PostContainer className={theme} >
+    <PostContainer className={`${theme}`} id={_id}>
       {openSidebar && <PostSidebar theme={theme}>
         <PostSidebarWrapper>
           {(!path && !admin) && <PostSidebarItem onClick={savePost}><Save />
@@ -265,7 +237,7 @@ const Post = ({ post, reportPost, theme, currentuser }) => {
             <DottedMenu theme={theme} />
           </PostTopRight>
         </PostTop>
-        <PostCenter onClick={() => setOpenSidebar(false)}>
+        <PostCenter onClick={() => setOpenSidebar(false)} >
 
           <PostText>{description}</PostText>
           {spam ? <SpammedPost><FaLock /><SpamText>This media is reported to be nuisance</SpamText></SpammedPost> :
@@ -278,7 +250,7 @@ const Post = ({ post, reportPost, theme, currentuser }) => {
               )}
             </div>}
         </PostCenter>
-        <PostBottom onClick={() => setOpenSidebar(false)}>
+        <PostBottom onClick={() => setOpenSidebar(false)} >
           <PostBottomLeft>
             <div className="icons-cover">
 
@@ -303,6 +275,7 @@ const Post = ({ post, reportPost, theme, currentuser }) => {
             <CommentHeader theme={theme} onClick={() => setOpenComment(!openComment)}>{comments?.length > 0 && comments?.length} comments</CommentHeader>
           </PostBottomRight>
         </PostBottom>
+
         {openComment && <PostComments currentuser={currentuser} theme={theme} id={_id} onClick={() => setOpenSidebar(!openSidebar)} comments={comments} setComments={setComments} onDelete={deleteComment} spam={spam} />}
       </PostWrapper>
 

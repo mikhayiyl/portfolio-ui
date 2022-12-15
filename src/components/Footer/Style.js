@@ -8,7 +8,7 @@ export const FooterContainer = styled.footer`
 `;
 
 
-export const InputContainer = styled.div`
+export const InputContainer = styled.form`
 margin: 0 auto;
 width: 50%;
 height: 40px;
