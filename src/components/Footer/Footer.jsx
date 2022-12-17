@@ -3,7 +3,8 @@ import axios from "axios";
 import { useRef } from "react";
 import { FaFacebook, FaGithub, FaInstagram, FaTwitter } from "react-icons/fa";
 import { animateScroll } from "react-scroll/modules";
-import Ratings from "../common/Ratings";
+import { Link as LinkR } from 'react-scroll';
+import Rating from "../common/Rating";
 import {
   FooterContainer,
   FooterWrap,
@@ -25,6 +26,7 @@ import {
 
 import { currentUser } from "../services/authService"
 import asyncErrors from "../middleware/AsyncErrors";
+import { Link, useLocation } from "react-router-dom";
 const Footer = () => {
   const textRef = useRef();
   const formRef = useRef();
@@ -40,6 +42,10 @@ const Footer = () => {
     await axios.post("/messengers", { senderEmail: currentUser().email, text: textRef.current.value, project: "facebook-clone" })
     formRef.current.reset()
   })
+
+
+  const location = useLocation().pathname.split("/")[1];
+
 
 
   return (
@@ -115,7 +121,17 @@ const Footer = () => {
           </SocialMediaWrap>
         </SocialMedia>
       </FooterWrap>
-      <Ratings />
+      {location === "help" ? <LinkR to="ratings" smooth="true"
+        className="link">
+
+        <Rating />
+      </LinkR> :
+
+
+        <Link to="/help" className="link">
+          <Rating />
+        </Link>}
+
     </FooterContainer>
   );
 };

@@ -2,6 +2,7 @@ import { CancelRounded } from "@material-ui/icons";
 import styled from "styled-components";
 import { mobile } from "../../ResponsiveDesigns";
 export const ShareBox = styled.div`
+position:relative;
 width: 100%;
 border-radius: 10px;
 padding: 0.5rem;

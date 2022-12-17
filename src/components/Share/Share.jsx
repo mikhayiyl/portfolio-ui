@@ -23,11 +23,14 @@ import { Link } from "react-router-dom";
 import logger from "../services/logger";
 import { getStorage, ref, uploadBytesResumable, getDownloadURL } from "firebase/storage";
 import app from "../common/Firebase";
+import LinearDeterminate from "../common/LinearProgress";
+
 const url = "/uploads"
 
 const Share = ({ name, theme, user }) => {
   const [description, setDescription] = useState('');
   const [file, setFile] = useState(null);
+  const [progress, setProgress] = useState();
 
 
   const handleSubmit = async (e) => {
@@ -61,6 +64,7 @@ const Share = ({ name, theme, user }) => {
           // Get task progress, including the number of bytes uploaded and the total number of bytes to be uploaded
           const progress = (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
           console.log('Upload is ' + progress + '% done');
+          setProgress(Math.round(progress));
           switch (snapshot.state) {
             case 'paused':
               console.log('Upload is paused');
@@ -100,7 +104,10 @@ const Share = ({ name, theme, user }) => {
 
 
   return (
-    <ShareBox className={`container ${theme}`}>
+    <ShareBox className={`container ${theme}`} >
+      {progress && <span className='progress-bar'>
+        <LinearDeterminate progress={progress} />
+      </span>}
       <BoxWrapper>
         <ShareTop>
           <ShareTopWrapper>
@@ -125,9 +132,9 @@ const Share = ({ name, theme, user }) => {
           {file.name.endsWith(".mp4") ?
             <PreviewVideo controls src={URL.createObjectURL(file)} /> :
             <PreviewImage src={URL.createObjectURL(file)} />}
-          <CancelImage onClick={() => setFile(null)} />
+          {!progress && <CancelImage onClick={() => setFile(null)} />}
         </Preview>}
-        <ShareBottom onSubmit={handleSubmit}>
+        {!progress && <ShareBottom onSubmit={handleSubmit}>
           <ShareOptions>
             {!file && <ShareOption htmlFor="file">
               <div className="icons-cover">
@@ -139,7 +146,7 @@ const Share = ({ name, theme, user }) => {
             }
             {file && <ShareOption>
               <div className="icons-cover">
-                <FaTag style={{ color: "blue" }} />
+                <FaTag style={{ color: "lightblue" }} />
               </div>
               <ShareText >Tag</ShareText>
             </ShareOption>}
@@ -157,7 +164,7 @@ const Share = ({ name, theme, user }) => {
             </ShareOption>
           </ShareOptions>
           {file && <button className="btn btn-info " type="submit">Post</button>}
-        </ShareBottom>
+        </ShareBottom>}
       </BoxWrapper>
     </ShareBox>
   );

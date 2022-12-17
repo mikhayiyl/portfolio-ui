@@ -103,3 +103,18 @@ body {
   background-color: lime;
   border: 3px solid #fff;
 }
+
+.progress-bar {
+  padding: 0px 15px;
+  width: 90%;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  z-index: 1;
+  background-color: #555;
+  box-shadow: 0 0 3px 1px #fff;
+  border-radius: 10px;
+  color: #fff;
+  font-weight: 600;
+}

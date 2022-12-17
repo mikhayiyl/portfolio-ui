@@ -5,9 +5,11 @@ import logger from '../../components/services/logger';
 import { getStorage, ref, uploadBytesResumable, getDownloadURL } from "firebase/storage";
 import app from "../../components/common/Firebase"
 import asyncErrors from '../../components/middleware/AsyncErrors';
+import LinearDeterminate from '../../components/common/LinearProgress';
 
 const Upload = ({ user, setIsOpen, openUpload, name, setProfile, profile }) => {
     const [file, setFile] = useState(null);
+    const [progress, setProgress] = useState();
     const coverPictures = user.images.filter(im => im.type !== 'profile');
     const profilePictures = user.images.filter(im => im.type !== 'cover');
 
@@ -35,6 +37,7 @@ const Upload = ({ user, setIsOpen, openUpload, name, setProfile, profile }) => {
                 // Get task progress, including the number of bytes uploaded and the total number of bytes to be uploaded
                 const progress = (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
                 console.log('Upload is ' + progress + '% done');
+                setProgress(Math.round(progress));
                 switch (snapshot.state) {
                     case 'paused':
                         console.log('Upload is paused');
@@ -73,11 +76,14 @@ const Upload = ({ user, setIsOpen, openUpload, name, setProfile, profile }) => {
 
     return (
         <div className="upload">
+            {progress && <span className='progress-bar'>
+                <LinearDeterminate progress={progress} />
+            </span>}
             {file && <div className="preview">
                 <img src={URL.createObjectURL(file)} className="previevImg" alt="cannotgetimage" />
-                <Cancel onClick={() => setFile(null)} className="cancel" />
+                {!progress && <Cancel onClick={() => setFile(null)} className="cancel" />}
             </div>}
-            <button className="btn btn-success btn-sm button m-1" onClick={() => { setIsOpen(false); openUpload(false) }}>Back</button>
+            {!progress && <button className="btn btn-success btn-sm button m-1" onClick={() => { setIsOpen(false); openUpload(false) }}>Back</button>}
             <div className="upload-top">
                 {!file && <label htmlFor="file">
                     <div>

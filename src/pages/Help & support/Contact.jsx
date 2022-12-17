@@ -3,7 +3,7 @@ import React, { useState } from "react";
 import Footer from "../../components/Footer/Footer";
 import Header from "../../components/Header";
 import "./style.scss";
-import { Rating } from '@mui/material'
+import { Rating, Stack } from '@mui/material'
 import axios from "axios";
 import { currentUser } from "../../components/services/authService";
 import { useEffect } from "react";
@@ -100,21 +100,27 @@ const Support = ({ theme }) => {
                             <RateReview className="gt icon" />
                             <div className="contact-info">
                                 {newValue < 0.5 ? <h2>Rate this project</h2> : <h2>Thanks for rating</h2>}
-                                {newValue > 0.5 && <text>you can always update rate</text>}
-                                <Rating
-                                    name="simple-controlled"
-                                    value={newValue}
-                                    precision={0.5}
-                                    onChange={(event, newValue) => { setNewValue(newValue) }}
-                                    emptyIcon={<StarBorder style={{ color: "#000" }} />}
-                                />
+                                {newValue > 0.5 && <small>you can always update rate</small>}
+                                <Stack spacing={1}>
+                                    <Rating
+                                        name="half-rating"
+                                        value={newValue}
+                                        precision={0.5}
+                                        onChange={(event, newValue) => { setNewValue(newValue) }}
+                                        emptyIcon={<StarBorder style={{ color: "#000" }} />}
+                                    />
+
+
+                                </Stack>
                                 <span className="badge bg-primary" onClick={handleSubmit}>submit</span>
                             </div>
                         </div>
                     </div>
                 </div>
             </main>
+
             <Footer />
+
         </>
     );
 };
