@@ -36,6 +36,8 @@ import DottedMenu from "../common/DottedMenu";
 import { Link, useLocation } from "react-router-dom";
 import logger from "../services/logger";
 import asyncErrors from "../middleware/AsyncErrors";
+import { getStorage, ref, deleteObject } from "firebase/storage";
+
 const Post = ({ post, reportPost, theme, currentuser }) => {
   const { _id, userId, description, media, likes, createdAt, spam } = post
 
@@ -154,12 +156,31 @@ const Post = ({ post, reportPost, theme, currentuser }) => {
   };
 
   //delete post 
-  const handleDelete = asyncErrors(async (id) => {
+  const handleDelete = asyncErrors(async (post) => {
     if (admin) {
-      await postapi.deletePost(id);
+      await postapi.deletePost(post._id);
 
+      if (post.media) {
+
+
+        const storage = getStorage();
+
+
+        // Create a reference to the file to delete
+        const desertRef = ref(storage, media.file);
+
+        // Delete the file
+        deleteObject(desertRef).then(() => {
+          // File deleted successfully
+
+
+        }).catch((error) => {
+          // Uh-oh, an error occurred!
+        });
+
+      }
     } else {
-      await postapi.deleteSavedPost(id, currentuser._id);
+      await postapi.deleteSavedPost(post._id, currentuser._id);
     }
 
     window.location.reload();
@@ -202,12 +223,12 @@ const Post = ({ post, reportPost, theme, currentuser }) => {
               Share Post
             </PostSidebarText>
           </PostSidebarItem>}
-          {admin && <PostSidebarItem onClick={() => handleDelete(_id)}><DeleteForever />
+          {admin && <PostSidebarItem onClick={() => handleDelete(post)}><DeleteForever />
             <PostSidebarText>
               Delete Post
             </PostSidebarText>
           </PostSidebarItem>}
-          {path && <PostSidebarItem onClick={() => handleDelete(_id)}><DeleteForever />
+          {path && <PostSidebarItem onClick={() => handleDelete(post)}><DeleteForever />
             <PostSidebarText>
               Remove this post
             </PostSidebarText>
@@ -242,12 +263,15 @@ const Post = ({ post, reportPost, theme, currentuser }) => {
           <PostText>{description}</PostText>
           {spam ? <SpammedPost><FaLock /><SpamText>This media is reported to be nuisance</SpamText></SpammedPost> :
             <div>
+              {media && <div>
 
-              {media.name === "video" ? (
-                <PostVideo src={media.file} controls></PostVideo>
-              ) : (
-                <PostImage src={media.file} alt={media.name} />
-              )}
+
+                {media.name === "video" ? (
+                  <PostVideo src={media.file} controls></PostVideo>
+                ) : (
+                  <PostImage src={media.file} alt={media.name} />
+                )}
+              </div>}
             </div>}
         </PostCenter>
         <PostBottom onClick={() => setOpenSidebar(false)} >

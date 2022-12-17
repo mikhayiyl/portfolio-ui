@@ -48,9 +48,8 @@ const Share = ({ name, theme, user }) => {
       const storage = getStorage(app);
       const storageRef = ref(storage, fileName);
 
-
-
       const uploadTask = uploadBytesResumable(storageRef, file);
+
 
       // Register three observers:
       // 1. 'state_changed' observer, called any time the state changes
@@ -79,7 +78,6 @@ const Share = ({ name, theme, user }) => {
         () => {
           // Handle successful uploads on complete
           getDownloadURL(uploadTask.snapshot.ref).then(async (downloadURL) => {
-            console.log('File available at', downloadURL);
             await axios.post(url, { userId: user._id, file: downloadURL, description, name: file.name, })
           }).then(() => window.location.reload()
           ).catch(ex => logger.log(ex))
