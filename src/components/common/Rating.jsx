@@ -74,7 +74,7 @@ export default function HoverRating() {
           }}
         >
           <Rating
-            name="hover-feedback"
+            name="simple-controlled"
             value={value}
             readOnly
             precision={0.5}

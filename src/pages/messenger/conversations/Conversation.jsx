@@ -45,8 +45,8 @@ const Conversation = ({ conversation, state }) => {
     return (
         <div className="conversation">
             <div className="image-Box">
-                {/* <img src={user.profilePicture} alt={user.username} className="conversationImg profileImg" /> */}
-                <img src="/assets/beach.jpg" alt={user.username} className="conversationImg profileImg" />
+                <img src={user.profilePicture} alt={user.username} className="conversationImg profileImg" />
+
                 {unreadTexts.length > 0 &&
                     <div className="total-chats">
                         <span className="badge ">
