@@ -131,26 +131,15 @@ const Post = ({ post, reportPost, theme, currentuser }) => {
       try {
         await postapi.unlikePost(_id, currentuser._id);
       } catch (error) {
-        if (error.response && error.response.status === 404) {
-          toast.warn("The Post is already deleted");
-        } else {
-          toast.warn("something failed");
-          logger.log(error);
-        }
+        logger.log(error);
       }
     } else if (!liked) {
       setLiked(true);
       setLikes(postLikes + 1);
-
       try {
         await postapi.likePost(_id, currentuser._id);
       } catch (error) {
-        if (error.response && error.response.status === 404) {
-          toast.warn("The Post is already deleted");
-        } else {
-          toast.warn("something failed");
-          logger.log(error);
-        }
+        logger.log(error);
       }
     }
   };
