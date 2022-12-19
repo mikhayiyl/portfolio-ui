@@ -22,6 +22,7 @@ const Notification = ({ state }) => {
         const token = { cancelToken: cancelToken.token }
         const getNotifications = asyncErrors(async () => {
             const { data } = await axios.get(`/notifications/${state.user._id}`, token);
+            console.log(data);
             const notifications = data.map(n => {
                 const user = state.allusers.find(u => u._id === n.senderId)
                 return { _id: n._id, username: user.username, text: n.text, image: user.profilePicture, createdAt: n.createdAt, postId: n.postId }
@@ -64,7 +65,8 @@ const Notification = ({ state }) => {
                     </li>)
                 }
             </ul>
-            <Link to="/notifications" className="notification-btn btn badge bg-primary link m-1">
+            <Link to="/notifications" className="notification-btn btn badge bg-primary link m-1" onClick={() => dispatch(notificationClosed("close"))
+            }>
                 see more
             </Link>
         </div>

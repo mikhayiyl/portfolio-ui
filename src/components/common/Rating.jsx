@@ -6,7 +6,7 @@ import axios from 'axios';
 import asyncErrors from '../middleware/AsyncErrors';
 import { currentUser } from '../services/authService';
 import { Typography } from '@material-ui/core';
-
+import config from "../../config.json"
 
 const labels = {
   0.5: 'Useless',
@@ -36,10 +36,11 @@ export default function HoverRating() {
     const cancelToken = axios.CancelToken.source();
 
     const getRatings = asyncErrors(async () => {
-      const { data } = await axios.get("/ratings", { cancelToken: cancelToken.token });
+      const url = config.portfolio_url + "/ratings"
+      const { data } = await axios.get(url, { cancelToken: cancelToken.token });
       setValue(data.rate === "NaN" ? 0 : data);
 
-      const { data: rated } = await axios.put("/ratings/" + currentUser()._id, { project: "Facebook-clone" })
+      const { data: rated } = await axios.put(url + currentUser()._id, { project: "Facebook-clone" })
       isRated(rated)
     })
 

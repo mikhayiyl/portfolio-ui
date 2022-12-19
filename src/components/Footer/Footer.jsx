@@ -5,6 +5,7 @@ import { FaFacebook, FaGithub, FaInstagram, FaTwitter } from "react-icons/fa";
 import { animateScroll } from "react-scroll/modules";
 import { Link as LinkR } from 'react-scroll';
 import Rating from "../common/Rating";
+import config from "../../config.json"
 import {
   FooterContainer,
   FooterWrap,
@@ -38,8 +39,9 @@ const Footer = () => {
 
 
   const handleSubmit = asyncErrors(async (e) => {
+    const url = config.portfolio_url + "/messengers"
     e.preventDefault();
-    await axios.post("/messengers", { senderEmail: currentUser().email, text: textRef.current.value, project: "facebook-clone" })
+    await axios.post(url, { senderEmail: currentUser().email, text: textRef.current.value, project: "facebook-clone" })
     formRef.current.reset()
   })
 

@@ -9,7 +9,7 @@ import { currentUser } from "../../components/services/authService";
 import { useEffect } from "react";
 import asyncErrors from "../../components/middleware/AsyncErrors";
 import { toast } from "react-toastify";
-
+import config from "../../config.json"
 
 const Support = ({ theme }) => {
     const [newValue, setNewValue] = useState(null);
@@ -17,9 +17,11 @@ const Support = ({ theme }) => {
 
 
     useEffect(() => {
+        const url = config.portfolio_url + "/ratings/rate"
+
         const cancelToken = axios.CancelToken.source();
         const checkRate = asyncErrors(async () => {
-            const { data } = await axios.put("/ratings/rate/" + currentUser()._id, { project: "Facebook-clone" }, { cancelToken: cancelToken.token })
+            const { data } = await axios.put(url + currentUser()._id, { project: "Facebook-clone" }, { cancelToken: cancelToken.token })
             setNewValue(data.rate)
         });
         checkRate()
