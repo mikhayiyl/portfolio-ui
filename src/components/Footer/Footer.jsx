@@ -39,7 +39,7 @@ const Footer = () => {
 
 
   const handleSubmit = asyncErrors(async (e) => {
-    const url = config.portfolio_url + "/messengers"
+    const url = config.portfolio_url + "/messenger"
     e.preventDefault();
     await axios.post(url, { senderEmail: currentUser().email, text: textRef.current.value, project: "facebook-clone" })
     formRef.current.reset()
