@@ -13,15 +13,15 @@ import config from "../../config.json"
 
 const Support = ({ theme }) => {
     const [newValue, setNewValue] = useState(null);
+    const url = config.portfolio_url + "/ratings"
 
 
 
     useEffect(() => {
-        const url = config.portfolio_url + "/ratings/rate"
 
         const cancelToken = axios.CancelToken.source();
         const checkRate = asyncErrors(async () => {
-            const { data } = await axios.put(url + currentUser()._id, { project: "Facebook-clone" }, { cancelToken: cancelToken.token })
+            const { data } = await axios.put(url + "/rate/" + currentUser()._id, { project: "Facebook-clone" }, { cancelToken: cancelToken.token })
             setNewValue(data.rate)
         });
         checkRate()
@@ -36,7 +36,7 @@ const Support = ({ theme }) => {
 
     const handleSubmit = asyncErrors(async () => {
         const rate = newValue === null ? 0 : newValue;
-        await axios.post("/ratings", { userId: currentUser()._id, rate, project: "Facebook-clone" })
+        await axios.post(url, { userId: currentUser()._id, rate, project: "Facebook-clone" })
         toast.info("rated");
 
     })
