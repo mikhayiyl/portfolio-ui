@@ -1,120 +1,89 @@
-@import "./config";
-@import "./messenger";
-
-* {
-  margin: 0;
-  padding: 0;
-  text-decoration: none;
-  user-select: none;
-}
+@import "config";
+@import "navbar";
+@import "home";
+@import "about";
+@import "skills";
+@import "projects";
+@import "preview";
+@import "contact";
+@import "message";
 
 body {
-  font-weight: weight(regular);
+  height: 100vh;
+  line-height: 1;
+  color: set-text($primary-color);
+  font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+  background: #333;
 }
 
-.icons {
-  font-size: 1rem;
-  cursor: pointer;
-  color: set-text($text-color);
-  &:hover {
-    transition: all 1s ease-in-out;
-    text-decoration: none;
-    color: $secondary-color;
-  }
+h1,
+h2 {
+  font-weight: 400;
 }
-.link {
-  cursor: pointer;
+a {
   text-decoration: none;
-  display: flex;
-  text-align: center;
-  align-items: center;
-  transition: all 0.5s ease-in-out;
-
-  &:hover {
-    text-decoration: none;
-    color: $secondary-color;
-  }
-
-  &.active {
-    color: $secondary-color;
-    border-bottom: 3px solid #fff;
-  }
+  color: set-text($primary-color);
 }
+.text-secondary {
+  color: $secondary-color;
+}
+header {
+  position: fixed;
+  z-index: 100;
+  width: 100%;
+  padding: 1rem;
+}
+main {
+  width: 100%;
+  height: 100%;
+  flex-direction: column;
+  @include center;
+}
+.social-icons {
+  position: fixed;
+  @include center;
+  flex-direction: column;
+  top: 15vh;
+  left: 0;
+  z-index: 200;
 
-.dark {
-  @include darkTheme(true);
-  box-shadow: 0 0 5px 0 #fff;
-  color: #fff !important;
+  a {
+    padding: 0.5rem;
+    @include transition-ease;
 
-  .link {
-    color: #fff;
-
-    &.active {
+    &:hover {
       color: $secondary-color;
     }
   }
-
-  .icons-cover {
-    width: 2rem;
-    background-color: #444;
-    height: 2rem;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    border-radius: 50%;
-  }
-
-  .contact-item {
-    box-shadow: 0 0 5px 1px #fff !important;
-  }
-
-  .section-title {
-    color: #fff;
-  }
 }
 
-.profileImg {
-  width: 32px;
-  height: 32px;
-  border-radius: 50%;
-  object-fit: cover;
-  box-shadow: 0 0 5px 0 #fff;
+.active {
+  color: $secondary-color;
 }
-.flex {
+
+header {
+  z-index: 100;
+}
+
+footer {
+  position: fixed;
+  left: 0rem;
+  bottom: 0rem;
+  z-index: 20;
   display: flex;
-  flex-wrap: wrap;
-  justify-content: space-between;
-}
-
-.center {
-  display: flex;
-  justify-content: center;
-  margin: 0 auto;
+  padding: 0.5em;
   flex-direction: column;
-  align-items: center;
-}
-.chatOnlineBadge {
-  position: absolute;
-  width: 12px;
-  height: 12px;
-  top: 2px;
-  right: 0;
-  border-radius: 50%;
-  background-color: lime;
-  border: 3px solid #fff;
+  color: set-text($primary-color);
 }
 
-.progress-bar {
-  padding: 0px 15px;
-  width: 90%;
+.cancel {
   position: absolute;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%);
-  z-index: 1;
-  background-color: #555;
-  box-shadow: 0 0 3px 1px #fff;
-  border-radius: 10px;
-  color: #fff;
-  font-weight: 600;
+  top: 1rem;
+  right: 1rem;
+  font-size: 3rem;
+  cursor: pointer;
+  background: #223243;
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
 }

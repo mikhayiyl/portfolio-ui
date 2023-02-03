@@ -1,0 +1,254 @@
+.projects-main {
+  overflow: hidden;
+  @include main;
+  background-image: url(../../public/assets/images/beach.png),
+    radial-gradient(rgba(#000, 0.4), rgba(#1034c34d, 0.7));
+  position: relative;
+  height: 100%;
+
+  .filter-bar {
+    width: 100%;
+    position: fixed;
+    top: 2.5rem;
+    left: 0.4rem;
+    z-index: 100;
+    @include center;
+    display: none;
+
+    @include media-md {
+      width: 50%;
+      top: 0.4rem;
+      display: block;
+    }
+  }
+
+  .filter-list {
+    list-style: none;
+    position: fixed;
+    top: 0.5rem;
+    left: -1rem;
+    z-index: 100;
+    width: 90%;
+    cursor: pointer;
+
+    @include media-md {
+      display: none;
+    }
+  }
+  .text-wrapper {
+    position: fixed;
+    bottom: -90vh;
+    right: 0;
+    left: 100vw;
+    animation: driveR 15s linear infinite;
+    .layer {
+      &::after {
+        content: "MY_PROJECTS.";
+        font-size: 5rem;
+
+        @include media-md {
+          font-size: 7rem;
+        }
+      }
+    }
+  }
+}
+
+.card-wrapper {
+  position: relative;
+  width: 100%;
+  display: flex;
+  margin: 2rem 0;
+  justify-content: space-between;
+  justify-content: center;
+  flex-wrap: wrap;
+  transition: 0.5s;
+  transform: skewY(-10deg);
+  z-index: 5;
+}
+
+.project-card {
+  margin: 30px;
+  position: relative;
+  width: 200px;
+  height: 300px;
+  background: #fff;
+  transition: 0.5s;
+  cursor: pointer;
+}
+
+.project-card::before {
+  content: "";
+  position: absolute;
+  top: -15px;
+  left: 0;
+  width: 100%;
+  height: 15px;
+  background: #00c0f6;
+  background: #00c1f6ed;
+  transform-origin: bottom;
+  transform: skewX(45deg);
+  transition: 0.5s;
+}
+.project-card::after {
+  content: "";
+  position: absolute;
+  top: -15px;
+  left: -15px;
+  width: 15px;
+  height: 50%;
+  background: #00c1f6d5;
+  transform-origin: left;
+  transform: skewY(45deg);
+  transition: 0.5s;
+}
+
+.project-card:hover {
+  transform: translateY(-40px);
+
+  .link {
+    opacity: 1;
+  }
+}
+
+.project-card-top {
+  position: relative;
+  width: 200px;
+  height: 150px;
+  background: #00c7ff;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
+  border: 3px solid #fff;
+}
+
+.project-img {
+  max-width: 150px;
+}
+
+.project-title {
+  position: relative;
+  color: #fff;
+  margin-top: 10px;
+  text-align: center;
+  text-transform: capitalize;
+  font-weight: 400;
+}
+
+.project-content {
+  position: relative;
+  width: 100%;
+  height: 200px;
+  padding: 20px;
+  color: #777;
+  background: #fff;
+  text-align: center;
+  ul {
+    h3 {
+      font-weight: 300;
+      font-size: 15px;
+      color: purple;
+      border-bottom: 3px solid hotpink;
+      width: 110px;
+      border-radius: 5px;
+      text-transform: uppercase;
+    }
+
+    li {
+      font-size: 13px;
+      text-transform: uppercase;
+      text-align: left;
+    }
+  }
+}
+
+.project-content::after {
+  content: "";
+  position: absolute;
+  top: -15px;
+  left: -15px;
+  width: 15px;
+  height: 100%;
+  background: #d9d9d9;
+  transform-origin: left;
+  transform: skewY(45deg);
+  transition: 0.5s;
+}
+
+.project-content::before {
+  content: "";
+  position: absolute;
+  left: 0;
+  bottom: 0;
+  width: 100%;
+  height: 300px;
+  background: linear-gradient(transparent, transparent, rgba(0, 0, 0, 0.1));
+  transform-origin: bottom;
+  transform: skewX(45deg);
+  transition: 0.5s;
+  pointer-events: none;
+  z-index: -1;
+}
+
+.card:hover .project-content::before {
+  transform: translateY(40px) skewX(45deg);
+  filter: blur(5px);
+  opacity: 0.5;
+}
+
+.project-card:nth-child(1) {
+  z-index: 3;
+}
+.project-card:nth-child(2) {
+  z-index: 2;
+}
+.project-card:nth-child(3) {
+  z-index: 1;
+}
+
+.rating {
+  position: absolute;
+  bottom: 3rem;
+  width: 100%;
+  margin: 0 auto;
+}
+
+.project-links {
+  @include center;
+  position: absolute;
+  bottom: 0.5rem;
+  width: 85%;
+  justify-content: space-between;
+
+  .link {
+    font-size: 13px;
+    font-weight: 500;
+    color: #000;
+    transition: 0.5s ease-in-out;
+    opacity: 0.75;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    &:hover {
+      color: orangered;
+    }
+  }
+}
+
+.projects-container {
+  margin-top: 3rem;
+  margin-bottom: 130px;
+  display: grid;
+  height: 100%;
+  width: 100%;
+  align-items: center;
+  grid-template-columns: 1fr;
+
+  @include media-md {
+    grid-template-columns: repeat(2, 1fr);
+  }
+  @include media-lg {
+    grid-template-columns: repeat(4, 1fr);
+  }
+}

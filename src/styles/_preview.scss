@@ -1,0 +1,96 @@
+@mixin bg {
+  border-radius: 10px;
+  background: rgba(255, 255, 255, 0.0015);
+  border: 1px solid rgba(255, 255, 255, 0.25);
+  border-bottom: 4px solid orangered;
+  box-shadow: 0 0px 5px 0px #fff;
+  backdrop-filter: blur(35px);
+  padding: 0.6rem;
+}
+
+.preview {
+  width: 100%;
+  height: 100%;
+  overflow-y: auto;
+  @include center;
+  flex-direction: column;
+
+  .preview-container {
+    margin-top: 60px;
+    width: 100%;
+    height: 100%;
+    @include center;
+    flex-direction: column;
+  }
+
+  .description {
+    width: clamp(50%, 500px, 90%);
+    height: 300px;
+    @include bg;
+    text-align: center;
+    font-size: 1.2rem;
+  }
+
+  .box {
+    @include center;
+    width: 100%;
+    flex-direction: column;
+
+    article {
+      @include bg;
+      width: 300px;
+      margin: 1rem;
+    }
+
+    @include media-md {
+      flex-direction: row;
+    }
+  }
+
+  .pictures {
+    width: 80%;
+    @include center;
+    flex-direction: column;
+    .imgs {
+      width: 100%;
+      @include center;
+      flex-wrap: wrap;
+    }
+    img {
+      @include bg;
+      margin: 0.5rem;
+      object-fit: contain;
+      height: 150px;
+      width: 200px;
+      border-radius: 0.5rem;
+      cursor: pointer;
+    }
+  }
+
+  .buttons {
+    display: flex;
+  }
+
+  .bigImg {
+    @include center;
+    @include bg;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    width: 90vw;
+    height: 90vh;
+    z-index: 101;
+    transform: translate(-50%, -50%);
+
+    @include media-md {
+      width: 80vw;
+      height: 90vh;
+    }
+
+    img {
+      width: 100%;
+      height: 100%;
+      object-fit: contain;
+    }
+  }
+}

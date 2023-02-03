@@ -1,0 +1,36 @@
+.bubbles {
+  position: absolute;
+  display: flex;
+  justify-content: space-around;
+  flex-wrap: wrap;
+  width: 100%;
+  height: 100vh;
+  z-index: 0;
+
+  .icon {
+    position: relative;
+    width: 16px;
+    height: 16px;
+    margin: 0.7rem;
+    border-radius: 50%;
+    background: #4fc3dc;
+    box-shadow: 0 0 0 4px #4fc3dc44, 0 0 30px #4fc3dc, 0 0 10px #4fc3dc;
+
+    animation: animate 15s linear infinite;
+    animation-delay: calc(120s / var(--i));
+
+    &:nth-child(even) {
+      background: #ff2d75;
+      box-shadow: 0 0 0 4px #ff2d7544, 0 0 30px #ff2d75, 0 0 10px #ff2d75;
+    }
+  }
+}
+
+@keyframes animate {
+  0% {
+    transform: translateY(100vh) scale(0);
+  }
+  100% {
+    transform: translateY(-10vh) scale(1);
+  }
+}

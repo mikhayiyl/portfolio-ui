@@ -1,0 +1,140 @@
+@mixin main {
+  background-blend-mode: multiply;
+  background-repeat: no-repeat;
+  background-attachment: fixed;
+  background-position: center;
+  background-size: cover;
+  position: relative;
+
+  .images,
+  .bikes,
+  .sun,
+  .road {
+    display: none;
+  }
+
+  @include media-md {
+    .bikes,
+    .sun {
+      display: block;
+    }
+
+    .road {
+      display: block;
+      position: fixed;
+    }
+    .images {
+      display: block;
+      position: fixed;
+      width: 100%;
+      height: 100px;
+      bottom: 100px;
+      object-fit: cover;
+      display: flex;
+
+      img {
+        position: absolute;
+        bottom: 0;
+      }
+      .car {
+        height: 50px;
+        bottom: 0;
+        animation-delay: 0.5s;
+      }
+      .img {
+        animation-delay: 2s;
+      }
+
+      .mt {
+        height: 350px;
+      }
+    }
+
+    .bikes {
+      position: fixed;
+      bottom: 10px;
+      z-index: 11;
+      height: 100px;
+    }
+    .moto {
+      animation-delay: 3s;
+    }
+  }
+}
+
+.about-main {
+  @include main;
+  @supports (background-blend-mode: multiply) {
+    background-image: url(../../public/assets/images/bg.png),
+      radial-gradient(rgba(#fff, 0.3), rgba(#000, 0.3));
+  }
+
+  @include media-md {
+    .about-bio {
+      font-size: 5.5rem;
+    }
+  }
+}
+
+.about {
+  padding-bottom: 2rem;
+
+  &-image {
+    height: 70vh;
+    width: 100%;
+    background: linear-gradient(
+        to right,
+        rgba($primary-color, 0.9),
+        rgba($primary-color, 0.6)
+      ),
+      url("../../public/assets/images/road2.png") center top;
+    background-size: cover;
+    display: flex;
+    align-items: center;
+    flex-direction: column;
+    justify-content: flex-end;
+  }
+  &-bio {
+    width: 80%;
+    text-align: center;
+    border-radius: 5px;
+    box-shadow: 0 0 4px 0px #fff;
+    background: rgba(#000, 0.7);
+    z-index: 90;
+    margin-top: 2rem;
+    padding: 0.4rem;
+
+    p {
+      margin-bottom: 2rem;
+      font-size: 1.2rem;
+      font-weight: 400;
+    }
+
+    .bio-header {
+      padding: 2rem 0 0.5rem;
+    }
+  }
+
+  footer {
+    transform: rotate(90deg) translate(-3rem, -4rem);
+  }
+}
+
+@include media-lg {
+  .about-bio {
+    font-size: 1.5rem;
+  }
+  .about {
+    &-image {
+      height: 50vh;
+    }
+  }
+
+  .bio-header {
+    padding: 1rem 0;
+  }
+}
+
+.title {
+  text-align: center;
+}

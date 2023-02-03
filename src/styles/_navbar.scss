@@ -1,0 +1,141 @@
+@mixin position {
+  position: absolute;
+  background-color: #fff;
+  border-radius: 15px;
+  height: 4px;
+}
+.menu-button {
+  position: absolute;
+  top: 1rem;
+  right: 1rem;
+  width: 30px;
+  height: 28px;
+  z-index: 2;
+  cursor: pointer;
+  &-burger {
+    @include position;
+    right: 0;
+    width: 30px;
+    top: 0.5rem;
+    @include transition-ease;
+
+    &::before {
+      content: "";
+      @include position;
+      right: 0;
+      top: -8px;
+      width: 30px;
+      @include transition-ease;
+    }
+    &::after {
+      content: "";
+      @include position;
+      top: 8px;
+      width: 20px;
+      @include transition-ease;
+    }
+
+    &.open {
+      transform: rotate(720deg);
+      background: transparent;
+
+      &::before {
+        transform: rotate(45deg) translate(5px, 7px);
+      }
+
+      &::after {
+        width: 30px;
+        transform: rotate(-45deg) translate(4px, -7px);
+      }
+    }
+  }
+}
+.navbar {
+  width: 100vw;
+  position: absolute;
+  height: 100vh;
+  top: 0;
+  left: 0;
+  right: 0;
+  visibility: hidden;
+
+  @include transition-ease;
+
+  &.open {
+    visibility: visible;
+  }
+  ul {
+    width: 100%;
+    height: 100vh;
+    @include center;
+    flex-direction: column;
+    background: $primary-color;
+    opacity: 0;
+    transform: translateY(-100%);
+    @include transition-ease;
+
+    &.open {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    li {
+      list-style: none;
+      margin-top: 2rem;
+      text-align: center;
+      transform: translateX(100vw);
+      @include transition-ease;
+
+      &.open {
+        transform: translateX(0);
+      }
+    }
+  }
+  a {
+    text-transform: uppercase;
+    font-size: 2rem;
+    font-weight: 300;
+    @include transition-ease;
+
+    &:hover {
+      color: $secondary-color;
+    }
+  }
+}
+
+@include media-md {
+  .menu-button {
+    visibility: hidden;
+  }
+
+  .navbar {
+    visibility: visible;
+    height: 55px;
+
+    ul {
+      margin-right: 0.4rem;
+      transform: translateY(0);
+      height: 100%;
+      display: block;
+      background: transparent;
+      text-align: right;
+      opacity: 1;
+    }
+
+    li {
+      display: inline;
+      padding-right: 0.5rem;
+      transform: translateX(0);
+    }
+
+    a {
+      font-size: 1.5rem;
+    }
+  }
+}
+
+@for $i from 1 through 5 {
+  .navbar li:nth-child(#{$i}) {
+    transition-delay: ($i * 0.1s) + 0.15s;
+  }
+}
