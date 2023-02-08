@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react'
 import { getSkills } from '../apiServices/skills';
 import Async from "../middleware/AsyncErrors";
 import axios from "axios"
+import { CircularProgress } from '@mui/material';
 const Skills = () => {
     const [data, setData] = useState([]);
 
@@ -24,7 +25,7 @@ const Skills = () => {
 
 
 
-
+    if (!data) return <div className="skills-container"><CircularProgress size="5rem" /></div>
     return (
         <div className="skills-container">
             {data.map(item => <Skill {...item} key={item._id} />
