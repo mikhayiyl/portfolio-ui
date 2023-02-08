@@ -73,7 +73,6 @@ const Item = ({ percent, title, skills }) => {
 
                 <ul>
                     {skills.map(skill => <li key={skill}>{skill}</li>)}
-                    <li>lorem</li>
                 </ul>
             </div>
         </div>

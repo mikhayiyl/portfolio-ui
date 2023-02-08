@@ -92,7 +92,7 @@ const Preview = ({ dropIn }) => {
 
                     </div>
                     <div className="buttons">
-                        <a target={"_blank"} rel="noreferrer" href={"/" + project.gitUrl} className="btn btn-warning btn-sm m-2">view code
+                        <a target={"_blank"} rel="noreferrer" href={ project.gitUrl} className="btn btn-warning btn-sm m-2">view code
                             <GitHub className='mx-1' />
                         </a>
                         <a target={"_blank"} rel="noreferrer" href={project.projectUrl} className="btn btn-primary btn-sm m-2">view page

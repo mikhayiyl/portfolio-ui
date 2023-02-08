@@ -8,16 +8,16 @@ const Footer = () => {
     return (
         <footer>
             <div className="social-icons">
-                <Link to="/">
+                <Link to="https://www.facebook.com/profile.php?id=100088898800957">
                     <Facebook />
                 </Link>
-                <Link to="/">
+                <Link to="https://twitter.com/Devine14Michael">
                     <Twitter />
                 </Link>
                 <Link to="/">
                     <Instagram />
                 </Link>
-                <Link to="/">
+                <Link to="https://github.com/mikhayiyl">
                     <GitHub />
                 </Link>
             </div>
