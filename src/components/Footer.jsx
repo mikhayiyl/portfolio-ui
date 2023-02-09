@@ -1,25 +1,43 @@
 import { Facebook, GitHub, Instagram, Twitter } from '@mui/icons-material';
+import axios from 'axios';
 
-
-import React from 'react'
-import { Link } from 'react-router-dom';
-
+import React, { useEffect, useState } from 'react'
+import Async from "../middleware/AsyncErrors"
 const Footer = () => {
+    const [links, setLinks] = useState([]);
+    let link = links[0];
+    useEffect(() => {
+        const cancelToken = axios.CancelToken.source();
+        const getData = Async(async () => {
+            const { data } = await axios.get("/links", { cancelToken: cancelToken.token });
+            setLinks(data);
+        })
+
+        getData();
+
+        return () => {
+            cancelToken.cancel();
+
+        }
+    }, []);
+
+
+    if (!link) link = {};
     return (
         <footer>
             <div className="social-icons">
-                <Link to="https://www.facebook.com/profile.php?id=100088898800957">
+                <a target={"_blank"} rel="noreferrer" href={link.fbLink}>
                     <Facebook />
-                </Link>
-                <Link to="https://twitter.com/Devine14Michael">
+                </a>
+                <a target={"_blank"} rel="noreferrer" href={link.twLink}>
                     <Twitter />
-                </Link>
-                <Link to="/">
+                </a>
+                <a target={"_blank"} rel="noreferrer" href={link.instLink}>
                     <Instagram />
-                </Link>
-                <Link to="https://github.com/mikhayiyl">
+                </a>
+                <a target={"_blank"} rel="noreferrer" href={link.gitLink}>
                     <GitHub />
-                </Link>
+                </a>
             </div>
             <span>Mikhayiyl &copy; copyright {new Date().getFullYear()} All Rights
                 Reserved</span>
